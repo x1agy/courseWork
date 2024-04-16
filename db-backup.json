@@ -1,0 +1,62 @@
+{
+    "teachers": {
+        "_id": {
+            "$oid": "661eb162ba75888351b97a21"
+        },
+        "login": "megaPuperSuper",
+        "password": "123qwe123TT",
+        "fisrtName": "Bababa",
+        "lastName": "Bebebe",
+        "surname": "Bibibi",
+        "phoneNumber": {
+            "$numberLong": "88005551122"
+        },
+        "GMT": "+3"
+    },
+    "users": {
+        "_id": {
+            "$oid": "661eb604ba75888351b97a27"
+        },
+        "login": "minecraftLover",
+        "password": "TTqwe123qwe",
+        "firstName": "Иван",
+        "lastName": "Иванов",
+        "surname": "Иванович",
+        "phoneNumber": {
+            "$numberLong": "88008881488"
+        },
+        "GMT": "+5",
+        "calendar": [
+            {
+            "1": [
+                {
+                "learnedTool": "Piano",
+                "musicName": "Rush E",
+                "comments": [
+                    {
+                    "role": "user",
+                    "text": "Today i'm learned Rush E and played it that good like i'm a good, even my cat cried "
+                    },
+                    {
+                    "role": "teacher",
+                    "nameAndSurname": "Bababa Bibibi",
+                    "text": "That is great, but don't be so obvious lier, cats cant cry!"
+                    }
+                ]
+                },
+                {
+                "learnedTool": "Hammer",
+                "musicName": "Breaking bones",
+                "comments": [
+                    {
+                    "role": "user",
+                    "text": "I made him cry Bababa Bibibi! I'm not a lier!"
+                    }
+                ]
+                }
+            ],
+            "2": []
+            }
+        ]
+    }
+}
