@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
 
-const client = new MongoClient('mongodb://localhost:27017/courseDB');
+const client = new MongoClient(process.env.DB_URL);
 const app = express();
 const port = 3001;
 
