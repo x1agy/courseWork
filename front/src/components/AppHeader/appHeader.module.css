@@ -1,0 +1,29 @@
+.header{
+    background-color: inherit;
+    height: 6rem;
+    display: flex;   
+}
+
+.contacts_holder{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1em;
+}
+
+.contacts_holder a{
+    display: flex;
+    align-items: center;
+}
+
+.phone_number{
+    font-size: 30px;
+    margin-inline-start: 0.2em;
+}
+
+.autorisation_buttons{
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

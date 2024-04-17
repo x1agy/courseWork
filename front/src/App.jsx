@@ -5,7 +5,6 @@ import {
     createBrowserRouter,
     RouterProvider
 } from 'react-router-dom';
-import { deleteUser, editUser, getAllTeachers, getAllUsers } from "./utils/api.js";
 
 const router = createBrowserRouter([
     {
@@ -16,11 +15,6 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
-
-    (async () => {
-        console.log(await editUser({id: '661eb604ba75888351b97a27', firstName: 'pipipi'}))
-    })()
-
     return(
         <AppLayout>
             <RouterProvider router={router} />

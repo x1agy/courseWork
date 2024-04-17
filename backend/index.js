@@ -1,11 +1,11 @@
 const { MongoClient, ObjectId } = require('mongodb');
+const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require("body-parser");
 
+const client = new MongoClient('mongodb://localhost:27017/courseDB');
 const app = express();
 const port = 3001;
-const client = new MongoClient('mongodb://localhost:27017/courseDB');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -75,6 +75,45 @@ app.post('/users/edit', async (req, res) => {
     }catch(e){
         console.log(e);
         res.send(e)
+    }
+})
+
+app.post('/confirm_email', async (req, res) => {
+
+    const randomCode = Math.floor(Math.random() * (1000000 - 99999 + 1) + 99999);
+
+    try{
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.LOGIN,
+                pass: process.env.PASSWORD,
+            },
+        });
+        
+        await transporter.sendMail({
+            from: 'Andrews music school',
+            to: req.body.login,
+            subject: 'Message from Andrews music school',
+            text: 'bibiibibi',
+            html: 'Here is your code: ' + randomCode,
+        });
+
+        res.send(JSON.stringify(randomCode))
+    }catch (e) {
+        console.log(e);
+        res.send(e);
+    }
+})
+
+app.post('/create_account', async (req, res) => {
+    try{
+        await client.connect();
+        await client.db().collection('users').insertOne(req.body)
+        res.send('success');
+    }catch(e){
+        console.log(e);
+        res.send(e);
     }
 })
 
