@@ -92,9 +92,9 @@ app.post('/confirm_email', async (req, res) => {
         });
         
         await transporter.sendMail({
-            from: 'Andrews music school',
+            from: 'Mary music school',
             to: req.body.login,
-            subject: 'Message from Andrews music school',
+            subject: 'Message from Mary music school',
             text: 'bibiibibi',
             html: 'Here is your code: ' + randomCode,
         });
