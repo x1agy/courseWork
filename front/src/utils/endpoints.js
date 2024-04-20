@@ -5,3 +5,4 @@ export const ADD_USER = '/users/post';
 export const EDIT_USER = '/users/edit';
 export const CONFIRM_EMAIL = '/confirm_email';
 export const CREATE_ACCOUNT = '/create_account';
+export const IS_EXIST = '/check_is_exist';

@@ -106,6 +106,21 @@ app.post('/confirm_email', async (req, res) => {
     }
 })
 
+app.post('/check_is_exist', async (req, res) => {
+    try{
+        await client.connect();
+        const users = await client.db().collection('users').find({login: req.body.login}).toArray();
+        if(users.length > 0){
+            res.send(users[0]);
+        }else{
+            res.send('not')
+        }
+    }catch(e){
+        console.log(e);
+        res.send(e);
+    }
+})
+
 app.post('/create_account', async (req, res) => {
     try{
         await client.connect();

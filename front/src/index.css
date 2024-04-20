@@ -7,6 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* html, body, .root, .app, body > div, body > div > div{
+  height: 100%;
+} */
+
 a{
   color: black;
 }

@@ -1,4 +1,4 @@
-import { ADD_USER, ALL_TEACHERS, ALL_USERS, CONFIRM_EMAIL, DELETE_USER, EDIT_USER } from "./endpoints";
+import { ADD_USER, ALL_TEACHERS, ALL_USERS, CONFIRM_EMAIL, CREATE_ACCOUNT, DELETE_USER, EDIT_USER, IS_EXIST } from "./endpoints";
 
 export const getAllUsers = async () => {
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + ALL_USERS);
@@ -63,12 +63,24 @@ export const confirmEmail = async (email) => {
 }
 
 export const createAccount = async (user) => {
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL + CONFIRM_EMAIL, {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + CREATE_ACCOUNT, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({...user})
+    })
+    const data = await response.text();
+    return data;
+}
+
+export const checkIsUserExist = async (email) => {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + IS_EXIST, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({login: email})
     })
     const data = await response.json();
     return data;

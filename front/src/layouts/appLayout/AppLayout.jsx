@@ -3,6 +3,7 @@ import AppHeader from "../../components/AppHeader/AppHeader";
 import { Layout } from "antd";
 
 import styles from './appLayout.module.css';
+import AppFooter from "../../components/AppFooter/AppFooter";
 
 const AppLayout = ({ children }) => {
     return(
@@ -11,6 +12,7 @@ const AppLayout = ({ children }) => {
             <div className={styles.bodyStyles}>
                 {children}
             </div>
+            <AppFooter />
         </Layout>
     )
 }

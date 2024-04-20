@@ -54,36 +54,33 @@
     .phone_number{
         font-size: medium;
     }
-    .logo{
-        width: 100px;
-    }
 }
 
 @media(max-width: 715px){
-    .header{
-        max-width: 55rem;
-        min-width: 45rem;
-    }
     .icons{
         width: 20px;
     }
-    .phone_number{
-        font-size: small;
-    }
-    .logo{
-        size: 100px;
-    }
-}
-
-@media(max-width: 715px){
     .logo{
         height: 100px;
+        width: 100px;
+        flex-shrink: 0;
     }
     .header{
-        max-width: 30rem;
-        min-width: 30rem;
+        max-width: 100%;
+        min-width: auto;
+        padding: 0;
+        align-items: center;
+        padding-top: 20px;
+        gap: 15px
     }
     .phone_number{
         display: none;
+    }
+    .authorization_buttons{
+        flex-wrap: wrap;
+        margin-left: auto;
+    }
+    .button{
+        width: 120px;
     }
 }
