@@ -1,7 +1,9 @@
 .header{
     background-color: inherit;
     height: 6rem;
-    display: flex;   
+    display: flex;
+    justify-content: space-between;
+    min-width: 65rem;
 }
 
 .contacts_holder{
@@ -21,9 +23,67 @@
     margin-inline-start: 0.2em;
 }
 
-.autorisation_buttons{
+.authorization_buttons{
     margin-inline-start: auto;
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.icons{
+    font-size: 35px;
+    width: 35px;
+}
+
+.icons:hover{
+    color: gray;
+}
+
+
+@media(max-width: 870px){
+    .header{
+        max-width: 55rem;
+        min-width: 45rem;
+    }
+    .icons{
+        width: 30px;
+    }
+    .icons:hover{
+        background-color: gray;
+    }
+    .phone_number{
+        font-size: medium;
+    }
+    .logo{
+        width: 100px;
+    }
+}
+
+@media(max-width: 715px){
+    .header{
+        max-width: 55rem;
+        min-width: 45rem;
+    }
+    .icons{
+        width: 20px;
+    }
+    .phone_number{
+        font-size: small;
+    }
+    .logo{
+        size: 100px;
+    }
+}
+
+@media(max-width: 715px){
+    .logo{
+        height: 100px;
+    }
+    .header{
+        max-width: 30rem;
+        min-width: 30rem;
+    }
+    .phone_number{
+        display: none;
+    }
 }

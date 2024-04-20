@@ -7,8 +7,10 @@ import styles from './appLayout.module.css';
 const AppLayout = ({ children }) => {
     return(
         <Layout className={styles.layout}>
-            <AppHeader />
-            {children}
+            <AppHeader/>
+            <div className={styles.bodyStyles}>
+                {children}
+            </div>
         </Layout>
     )
 }

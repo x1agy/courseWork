@@ -1,3 +1,9 @@
 .layout{
     background-color: inherit;
+    align-items: center;
+}
+
+.bodyStyles{
+    display: flex; 
+    justify-content: center;
 }
