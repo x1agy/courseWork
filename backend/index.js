@@ -111,7 +111,13 @@ app.post('/check_is_exist', async (req, res) => {
         await client.connect();
         const users = await client.db().collection('users').find({login: req.body.login}).toArray();
         if(users.length > 0){
-            res.send(users[0]);
+            if(req.body?.password === users[0].password){
+                res.send(users[0]);
+            }else if(req.body.password){
+                res.send({result: false})
+            }else{
+                res.send('exist');
+            }
         }else{
             res.send('not')
         }
@@ -125,6 +131,19 @@ app.post('/create_account', async (req, res) => {
     try{
         await client.connect();
         await client.db().collection('users').insertOne(req.body)
+        res.send('success');
+    }catch(e){
+        console.log(e);
+        res.send(e);
+    }
+})
+
+app.post('/change_password', async (req, res) => {
+    const filter = {login: req.body.login};
+    const update = {$set: {password: req.body.password}}
+    try{
+        await client.connect();
+        const result = await client.db().collection('users').findOneAndUpdate(filter, update);
         res.send('success');
     }catch(e){
         console.log(e);
