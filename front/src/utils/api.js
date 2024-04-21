@@ -1,4 +1,4 @@
-import { ADD_USER, ALL_TEACHERS, ALL_USERS, CONFIRM_EMAIL, CREATE_ACCOUNT, DELETE_USER, EDIT_USER, IS_EXIST } from "./endpoints";
+import { ADD_USER, ALL_TEACHERS, ALL_USERS, CHANGE_PASSWORD, CONFIRM_EMAIL, CREATE_ACCOUNT, DELETE_USER, EDIT_USER, IS_EXIST } from "./endpoints";
 
 export const getAllUsers = async () => {
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + ALL_USERS);
@@ -74,14 +74,30 @@ export const createAccount = async (user) => {
     return data;
 }
 
-export const checkIsUserExist = async (email) => {
+export const checkIsUserExist = async (credits) => {
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + IS_EXIST, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({login: email})
+        body: credits?.password ? JSON.stringify({login: credits.login, password: credits.password}) : JSON.stringify({login: credits})
     })
-    const data = await response.json();
+    if(credits?.password){
+        const data = await response.json();
+        return data
+    }
+    const data = await response.text();
     return data;
+}
+
+export const changePassword = async (credits) => {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + CHANGE_PASSWORD, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(credits)
+    })
+    const data = await response.text();
+    return data
 }

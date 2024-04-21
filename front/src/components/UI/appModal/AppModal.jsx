@@ -2,8 +2,10 @@ import React from "react";
 import Modal from "antd/es/modal/Modal";
 import Title from "antd/es/typography/Title";
 
+import { gmtFields } from "../../../utils/formFields";
+
 import styles from './appModal.module.css';
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select } from "antd";
 
 const modalStyles = {
     mask: {
@@ -11,8 +13,13 @@ const modalStyles = {
     },
 };
 
-const AppModal = ({open, handleClose, title, children, fields, handleSubmit, ...rest}) => {
+const AppModal = ({open, handleClose, title, children, fields, handleSubmit, changePassword, ...rest}) => {
 
+    const [form] = Form.useForm();
+
+    const onGmtChange = (value) => {
+        form.setFieldsValue({GMT: value})
+    }
 
     return(
         <Modal 
@@ -24,20 +31,34 @@ const AppModal = ({open, handleClose, title, children, fields, handleSubmit, ...
         >
             {children}
             <Title className={styles.title}>{title}</Title>
-            <Form onFinish={handleSubmit} layout="vertical" autoComplete='true'>
+            <Form onFinish={handleSubmit} layout="vertical" autoComplete='true' form={form}>
                 {fields.map((item, index) => {
                     return(
-                        item.name === 'password'
-                        ?   <Form.Item label={item.label} validateTrigger="onBlur" name={item.name} rules={[...item.rules]} key={index}>
-                                <Input.Password />
-                            </Form.Item>
-                        :   <Form.Item label={item.label} validateTrigger="onBlur" name={item.name} rules={[...item.rules]} key={index}>
-                                <Input />
-                            </Form.Item>   
+                        <Form.Item 
+                            label={item.label} 
+                            validateTrigger="onBlur" 
+                            name={item.name} 
+                            rules={[...item.rules]} 
+                            key={index}
+                        >
+                            {
+                                item.name === 'GMT'
+                                ? 
+                                  <Select onChange={onGmtChange}>
+                                    {gmtFields.map((item, index) => (
+                                        <Select.Option key={index} value={item.value}>{item.value + ' ' + item.name}</Select.Option>
+                                    ))}
+                                  </Select>
+                                : item.name === 'password'
+                                ? <Input.Password />
+                                : <Input />
+                            }
+                        </Form.Item>   
                     )
                 })}
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">Отправить</Button>
+                    <Button type="primary" htmlType="submit" style={{marginInlineEnd: '1em'}}>Отправить</Button>
+                    {fields.length === 2 && <Button onClick={changePassword}>Забыли пароль?</Button>}
                 </Form.Item>
             </Form>
         </Modal>

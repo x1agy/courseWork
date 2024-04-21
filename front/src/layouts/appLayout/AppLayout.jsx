@@ -8,9 +8,11 @@ import AppFooter from "../../components/AppFooter/AppFooter";
 const AppLayout = ({ children }) => {
     return(
         <Layout className={styles.layout}>
-            <AppHeader/>
-            <div className={styles.bodyStyles}>
-                {children}
+            <div>
+                <AppHeader/>
+                <div className={styles.bodyStyles}>
+                    {children}
+                </div>
             </div>
             <AppFooter />
         </Layout>
