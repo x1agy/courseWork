@@ -58,9 +58,10 @@ app.post('/users/post', async (req, res) => {
 
 app.post('/users/edit', async (req, res) => {
 
-    const filter = { _id: new ObjectId(req.body.id)};
+    const filter = { _id: new ObjectId(req.body._id)};
 
-    delete req.body.id;
+    delete req.body._id;
+    delete req.body.fullName;
 
     const updateDoc = {
         $set: {
@@ -70,7 +71,8 @@ app.post('/users/edit', async (req, res) => {
 
     try{
         await client.connect();
-        client.db().collection('users').updateOne(filter, updateDoc);
+        const result = await client.db().collection('users').updateOne(filter, updateDoc);
+        console.log(result)
         res.send('success');
     }catch(e){
         console.log(e);
@@ -90,7 +92,7 @@ app.post('/confirm_email', async (req, res) => {
                 pass: process.env.PASSWORD,
             },
         });
-        
+
         await transporter.sendMail({
             from: 'Mary music school',
             to: req.body.login,
@@ -99,7 +101,7 @@ app.post('/confirm_email', async (req, res) => {
             html: 'Here is your code: ' + randomCode,
         });
 
-        res.send(JSON.stringify(randomCode))
+        res.send(JSON.stringify(randomCode));
     }catch (e) {
         console.log(e);
         res.send(e);
@@ -114,12 +116,12 @@ app.post('/check_is_exist', async (req, res) => {
             if(req.body?.password === users[0].password){
                 res.send(users[0]);
             }else if(req.body.password){
-                res.send({result: false})
+                res.send({result: false});
             }else{
-                res.send('exist');
+                res.send('exist ' + users[0].login);
             }
         }else{
-            res.send('not')
+            res.send('not');
         }
     }catch(e){
         console.log(e);

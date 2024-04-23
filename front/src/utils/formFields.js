@@ -90,6 +90,45 @@ export const registrationFields = [
     },
 ]
 
+export const editUserFields = [
+    ...loginFields,
+    {
+        label: 'ФИО (формат: фамилия имя отчество если есть)',
+        validateTrigger: 'onBlur',
+        name: 'fullName',
+        rules: [
+            {required: true, message: 'Заполните поле'},
+            {pattern: /[А-яёЁ]+\s[А-яёЁ]+\s?([А-яёЁ]+)?/, message: 'Введите ФИО'}
+        ]
+    },
+    {
+        label: 'Номер телефона',
+        validateTrigger: 'onBlur',
+        name: 'phoneNumber',
+        rules: [
+            {required: true, message: 'Заполните поле'},
+            {pattern: phoneRegexp, message: 'Введите правильный номер телефона'}
+        ]
+    },
+    {
+        label: 'Часовой пояс',
+        validateTrigger: 'onBlur',
+        name: 'GMT',
+        rules: [
+            {required: true, message: 'Заполните поле'},
+            {pattern: /[+-]\d?\d/g, message: 'Введите правильный часовой пояс'}
+        ]
+    },
+    {
+        label: 'Инструмент',
+        validateTrigger: 'onBlur',
+        name: 'tool',
+        rules: [
+            {required: true, message: 'Заполните поле'}
+        ]
+    },
+]
+
 export const gmtFields = [
     {
         value: '-11',

@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, { useCallback, useContext, useEffect, useReducer, useState } from "react";
 import { Anchor, Button, Form, Input, Modal, message } from "antd";
 import AppModal from "../UI/appModal/AppModal";
 import Title from "antd/es/typography/Title";
 
-import { changePassword, checkIsUserExist, confirmEmail, createAccount } from './../../utils/api';
+import { changePassword, checkIsUserExist, confirmEmail, createAccount } from '../../utils/api';
 import { loginFields, recoveryFields, registrationFields } from "../../utils/formFields";
+import { UserContext } from "../../App";
 
 const anchorTypes = ['Регистрация', 'Вход'];
 
@@ -57,9 +58,10 @@ const LoginModal = ({
         error: errorMessage, 
         success: successMessage
     }, dispatch] = useReducer(reducer, initialState);
-
-    const [user, setUser] = useState();
+    
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+    const [user, setUser] = useState();
+    const {userContext, setUserContext} = useContext(UserContext);
 
     const error = useCallback((message) => {
         messageApi.open({
@@ -81,7 +83,7 @@ const LoginModal = ({
     }
 
     const handleSubmit = async (user) => {
-        setUser(user)
+        setUser(user);
         if(modalType === 'Вход'){
             try{
                 const profile = await checkIsUserExist({login: user.login, password: user.password});
@@ -89,7 +91,9 @@ const LoginModal = ({
                     dispatch({
                         type: 'loginResult',
                         payload: {success: 'Вы успешно вошли'}
-                    })
+                    });
+                    setUserContext(profile);
+                    localStorage.setItem('user', JSON.stringify(profile));
                 }else{
                     dispatch({
                         type: 'loginResult',
@@ -104,19 +108,24 @@ const LoginModal = ({
                     payload: {error: 'Произошла ошибка при входе'}
                 })
             }
+
         }else{
-            const isExist = (await checkIsUserExist(user.login)) !== 'not';
-            if(isExist){
-                error('Пользователь с такой почтой уже существует')
-            }else{
-                const code = await confirmEmail(user.login);
-                dispatch({
-                    type: 'emailConfirm',
-                    payload: {
-                        emailCode: code,
-                        isConfirmEmailModalOpen: true
-                    }
-                });
+            try{
+                const isExist = (await checkIsUserExist(user.login)).includes('exist');
+                if(isExist){
+                    error('Пользователь с такой почтой уже существует')
+                }else{
+                    const code = await confirmEmail(user.login);
+                    dispatch({
+                        type: 'emailConfirm',
+                        payload: {
+                            emailCode: code,
+                            isConfirmEmailModalOpen: true,
+                        }
+                    });
+                }
+            }catch(e){
+                console.log(e);
             }
         }
     }
@@ -214,7 +223,7 @@ const LoginModal = ({
     )
 }
 
-const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) => {
+export const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) => {
     
     const handleSubmit = () => {
         handleClose();
@@ -259,7 +268,7 @@ const ChangePasswordModal = ({open, handleClose, setError, setSuccess}) => {
 
     const getCode = async (login) => {
         const codeEmail = await confirmEmail(login);
-        setCode(codeEmail)
+        setCode(codeEmail);
     }
 
     const handleSubmit = (values) => {

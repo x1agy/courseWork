@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import AppLayout from "./layouts/appLayout/AppLayout.jsx";
 import PageNotFound from "./pages/notFound/PageNotFound.jsx";
 import {
@@ -6,20 +6,35 @@ import {
     RouterProvider
 } from 'react-router-dom';
 import Home from "./pages/home/Home.jsx";
+import { UserPage } from "./pages/userPage/UserPage.jsx";
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Home />,
         errorElement: <PageNotFound />
+    },
+    {
+        path: 'user-page',
+        element: <UserPage />,
+        errorElement: <PageNotFound />
     }
 ])
 
+export const UserContext = createContext();
+
+const initialState = JSON.parse(localStorage.getItem('user'));
+
 const App = () => {
+
+    const [userContext, setUserContext] = useState(initialState);
+
     return(
-        <AppLayout>
-            <RouterProvider router={router} />
-        </AppLayout>
+        <UserContext.Provider value={{userContext, setUserContext}}>
+            <AppLayout>
+                <RouterProvider router={router} />
+            </AppLayout>
+        </UserContext.Provider>
     )
 }
 

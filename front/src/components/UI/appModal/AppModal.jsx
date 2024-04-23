@@ -1,11 +1,10 @@
 import React from "react";
 import Modal from "antd/es/modal/Modal";
 import Title from "antd/es/typography/Title";
-
+import { Button, Form, Input, Select } from "antd";
 import { gmtFields } from "../../../utils/formFields";
 
 import styles from './appModal.module.css';
-import { Button, Form, Input, Select } from "antd";
 
 const modalStyles = {
     mask: {
@@ -13,7 +12,17 @@ const modalStyles = {
     },
 };
 
-const AppModal = ({open, handleClose, title, children, fields, handleSubmit, changePassword, ...rest}) => {
+const AppModal = ({
+        open, 
+        handleClose, 
+        title, 
+        children, 
+        fields, 
+        handleSubmit, 
+        changePassword,
+        fullWidth,
+        ...rest
+    }) => {
 
     const [form] = Form.useForm();
 
@@ -40,6 +49,7 @@ const AppModal = ({open, handleClose, title, children, fields, handleSubmit, cha
                             name={item.name} 
                             rules={[...item.rules]} 
                             key={index}
+                            initialValue={item.defaultValue}
                         >
                             {
                                 item.name === 'GMT'
@@ -57,7 +67,7 @@ const AppModal = ({open, handleClose, title, children, fields, handleSubmit, cha
                     )
                 })}
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" style={{marginInlineEnd: '1em'}}>Отправить</Button>
+                    <Button type="primary" htmlType="submit" style={{marginInlineEnd: '1em', width: fullWidth ? '100%' : ''}}>Отправить</Button>
                     {fields.length === 2 && <Button onClick={changePassword}>Забыли пароль?</Button>}
                 </Form.Item>
             </Form>

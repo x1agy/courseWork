@@ -1,10 +1,22 @@
 import { Flex } from "antd";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Text from 'antd/es/typography/Text';
 
 import styles from './home.module.css';
+import { UserContext } from './../../App';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
+    const {userContext} = useContext(UserContext);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(userContext?.login){
+            navigate('/user-page');
+        }    
+    }, [])
     return(
         <Flex className={styles.home}>
             <h1 className={styles.title}>Информация</h1>

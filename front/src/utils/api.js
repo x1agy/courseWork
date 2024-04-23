@@ -50,14 +50,15 @@ export const editUser = async (user) => {
     return data;
 }
 
-export const confirmEmail = async (email) => {
+export const confirmEmail = async (login) => {
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + CONFIRM_EMAIL, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({login: email})
+        body: JSON.stringify({login: login})
     })
+    
     const data = await response.json();
     return data;
 }
