@@ -27,10 +27,10 @@ const AppHeader = () => {
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
     const [isUserChangeModalOpen, setIsUserChangeModalOpen] = useState(false);
     const [messageApi, contextHolder] = antdMessage.useMessage();
-    const weekChartData = formatWeekDataFromUser(userContext);
+    const weekChartData = formatWeekDataFromUser(userContext ?? []);
     const weekChartDataKeys= weekChartData
-        .reduce((acc, item) => [...acc, ...Object.keys(item)], [])
-        .reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]);
+        ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
+        ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]);
 
     const error = (message) => {
         messageApi.open({
@@ -44,7 +44,7 @@ const AppHeader = () => {
         type: 'success',
         content: message,
         });
-    }
+    }   
 
     const handleQuit = () => {
         setUserContext(null);

@@ -1,4 +1,7 @@
 export const formatWeekDataFromUser = (user) => {
+    if(user.length === 0){
+        return []
+    }
     const lastMonth = user.calendar.length - 1;
 
     return user.calendar[lastMonth].map(item => {
