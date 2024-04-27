@@ -5,7 +5,7 @@ import { BellOutlined, PhoneOutlined } from '@ant-design/icons';
 import { CgProfile } from "react-icons/cg";
 import { RiTelegramLine } from "react-icons/ri";
 import { BsWhatsapp } from "react-icons/bs";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import styles from './appHeader.module.css';
 import LoginModal from "../loginModal/LoginModal";
@@ -16,6 +16,7 @@ import { checkIsUserExist, editUser } from "../../utils/api";
 import Title from "antd/es/typography/Title";
 import { formatWeekDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
+import useScreenSize from './../../hooks/useScreenSize';
 
 const { Header } = Layout;
 
@@ -27,6 +28,7 @@ const AppHeader = () => {
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
     const [isUserChangeModalOpen, setIsUserChangeModalOpen] = useState(false);
     const [messageApi, contextHolder] = antdMessage.useMessage();
+    const screenSize = useScreenSize(700);
     const weekChartData = formatWeekDataFromUser(userContext ?? []);
     const weekChartDataKeys= weekChartData
         ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
@@ -124,10 +126,10 @@ const AppHeader = () => {
                 <>
                     <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
                         <Title>{userContext.fullName}</Title>
-                        <p><strong>Номер телефона:</strong> +{userContext.phoneNumber}</p>
-                        <p><strong>Инструмент:</strong> {userContext.tool}</p>
+                        <p key='number'><strong>Номер телефона:</strong> +{userContext.phoneNumber}</p>
+                        <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
                         <BarChart
-                            width={500}
+                            width={screenSize.width > 700 ? 500 : 400}
                             height={300}
                             data={weekChartData}
                             margin={{
@@ -142,7 +144,7 @@ const AppHeader = () => {
                             <Legend />
                             {weekChartDataKeys.map((item, index) => {
                                 return(
-                                    <Bar dataKey={item} stackId={index} fill={randomHexColor()} />
+                                    <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
                                 )
                             })}
                         </BarChart>

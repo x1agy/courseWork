@@ -61,7 +61,7 @@ const LoginModal = ({
     
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
     const [user, setUser] = useState();
-    const {userContext, setUserContext} = useContext(UserContext);
+    const {setUserContext} = useContext(UserContext);
 
     const error = useCallback((message) => {
         messageApi.open({
@@ -94,6 +94,7 @@ const LoginModal = ({
                     });
                     setUserContext(profile);
                     localStorage.setItem('user', JSON.stringify(profile));
+                    window.location.href = '/user-page'
                 }else{
                     dispatch({
                         type: 'loginResult',

@@ -15,9 +15,15 @@ const router = createBrowserRouter([
         errorElement: <PageNotFound />
     },
     {
-        path: 'user-page',
+        path: '/user-page',
         element: <UserPage />,
-        errorElement: <PageNotFound />
+        errorElement: <PageNotFound />,
+        children: [
+            {
+                path: 'stats',
+                element: <UserPage />
+            }
+        ]
     }
 ])
 

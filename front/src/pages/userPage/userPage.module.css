@@ -1,0 +1,12 @@
+.container{
+    flex-direction: column;
+}
+
+.anchor{
+    :global(.ant-tabs-nav-list){
+        gap: 50px !important;
+    }
+    :global(.ant-tabs-tab-btn){
+        font-size: 2rem !important;
+    }
+}
