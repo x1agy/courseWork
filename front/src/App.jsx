@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Home from "./pages/home/Home.jsx";
 import { UserPage } from "./pages/userPage/UserPage.jsx";
+import { editUser } from "./utils/api.js";
 
 const router = createBrowserRouter([
     {
@@ -33,7 +34,18 @@ const initialState = JSON.parse(localStorage.getItem('user'));
 
 const App = () => {
 
-    const [userContext, setUserContext] = useState(initialState);
+    const [userContext, setUserContex] = useState(initialState);
+
+    const setUserContext = async (user) => {
+        if(user === null){
+            setUserContex(null)
+            return
+        }
+        setUserContex(user);
+        localStorage.setItem('user', JSON.stringify(user));
+        const response = await editUser(user);
+        return response
+    }
 
     return(
         <UserContext.Provider value={{userContext, setUserContext}}>

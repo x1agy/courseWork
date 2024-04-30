@@ -94,14 +94,12 @@ const LoginModal = ({
                     });
                     setUserContext(profile);
                     localStorage.setItem('user', JSON.stringify(profile));
-                    window.location.href = '/user-page'
                 }else{
                     dispatch({
                         type: 'loginResult',
                         payload: {error: 'Неправильный логин или пароль'}
                     })
                 }
-                console.log(profile);
             }catch(e){
                 console.log(e)
                 dispatch({

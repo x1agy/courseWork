@@ -140,8 +140,6 @@ const AppHeader = () => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
-                            <Tooltip />
-                            <Legend />
                             {weekChartDataKeys.map((item, index) => {
                                 return(
                                     <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />

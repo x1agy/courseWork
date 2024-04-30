@@ -36,8 +36,6 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <Tooltip />
-                        <Legend />
                         {chartDataKeys.map((item, index) => {
                             return(
                                 <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
@@ -60,8 +58,6 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <Tooltip />
-                        <Legend />
                         {chartDataKeys.map((item, index) => {
                             return(
                                 <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />

@@ -15,8 +15,8 @@ const Home = () => {
     useEffect(() => {
         if(userContext?.login){
             navigate('/user-page');
-        }    
-    }, [])
+        }
+    }, [userContext, navigate])
     return(
         <Flex className={styles.home}>
             <h1 className={styles.title}>Информация</h1>

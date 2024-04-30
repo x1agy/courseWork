@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../App";
 import { Flex, Tabs } from "antd";
 
 import styles from './userPage.module.css';
 import { UserStats } from './../../components/UserStats/UserStats';
 import Calendar from "../../components/Calendar/Calendar";
+import { useNavigate } from "react-router-dom";
 
 const tabsItems = [
     {
@@ -27,10 +28,13 @@ const tabsItems = [
 export const UserPage = () => {
 
     const {userContext} = useContext(UserContext);
-
-    if(!userContext){
-        window.location.href = '/';
-    }
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if(!userContext){
+            navigate('/')
+        }
+    }, [userContext])
 
     return(
         <Flex className={styles.container}>

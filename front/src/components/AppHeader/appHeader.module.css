@@ -4,6 +4,9 @@
     display: flex;
     justify-content: space-between;
     min-width: 65rem;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
 }
 
 .contacts_holder{
