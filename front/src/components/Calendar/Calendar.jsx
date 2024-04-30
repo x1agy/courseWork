@@ -88,7 +88,7 @@ const CalendarComponent = () => {
   };
   
   const onCellRender = (current) => {
-    const findDay = (userContext?.calendar ?? [])[current.$M]?.find((_, index) => current.$D === index)
+    const findDay = (userContext?.calendar ?? []).length >= current.$M ? userContext?.calendar[current.$M]?.find((_, index) => current.$D === index) : [];
     if(findDay?.length){
       return dateCellRender(findDay)
     }
@@ -101,7 +101,7 @@ const CalendarComponent = () => {
         className={styles.calendar} 
         cellRender={onCellRender}
       />
-      <Button onClick={() => setIsModalOpen(true)} disabled={userContext?.calendar[new Date().getMonth()]?.length}>Добавить активность</Button>
+      <Button onClick={() => setIsModalOpen(true)} disabled={userContext?.calendar?.length >= new Date().getMonth() ? userContext.calendar[new Date().getMonth()].length : false}>Добавить активность</Button>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
