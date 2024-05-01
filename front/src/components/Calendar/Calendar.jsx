@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Badge, Button, Calendar, Dropdown, Flex, Form, Input, Modal, Select, Space } from 'antd';
+import { Badge, Button, Calendar, Dropdown, Flex, Form, Input, Modal, Select, Space, TimePicker } from 'antd';
 
 import styles from './calendar.module.css';
 import { UserContext } from '../../App';
@@ -9,6 +9,7 @@ const CalendarComponent = () => {
   
   const {userContext, setUserContext} = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNotActive, setIsNotActive] = useState(false);
 
   const handleSubmit = (values) => {
     const currentDate = new Date();
@@ -26,6 +27,9 @@ const CalendarComponent = () => {
       setUserContext({...userContext, calendar: [...array, [...dayArray, [{tool: values.tool, activity: values.activity}]]]})
       return
     }
+    if(userContext.calendar.length - 1 < month){
+      userContext.calendar.push([])
+    }
     const dayArray = [];
     for(let i = 0; i < (day - userContext.calendar[month].length); i++){
       dayArray.push([]);
@@ -41,7 +45,14 @@ const CalendarComponent = () => {
             [
               ...lastMonth, 
               ...dayArray, 
-              [{tool: values.tool, activity: values.activity}]
+              [
+                {
+                  tool: values.tool, 
+                  activity: values.activity,
+                  comment: values?.comment,
+                  playedTime: values.playedTime
+                }
+              ]
             ]
           ]
         }
@@ -56,7 +67,11 @@ const CalendarComponent = () => {
             {
               key: '1',
               label: (
-                <p className={styles.dropdownItem}>Инструмент: <h3>{item.tool}</h3></p>
+                <>
+                  <p className={styles.dropdownItem}>Инструмент: <h3>{item.tool}</h3></p>
+                  <p className={styles.dropdownItem}>Время занятий: <h3>{item.playedTime}</h3></p>
+                  {item?.comment && <p className={styles.dropdownItem}>Коментарий: <h3>{item?.comment}</h3></p>}
+                </>
               ),
             },
           ];
@@ -101,22 +116,34 @@ const CalendarComponent = () => {
         className={styles.calendar} 
         cellRender={onCellRender}
       />
-      <Button onClick={() => setIsModalOpen(true)} disabled={userContext?.calendar?.length >= new Date().getMonth() ? userContext.calendar[new Date().getMonth()].length : false}>Добавить активность</Button>
+      <Button onClick={() => setIsModalOpen(true)} disabled={userContext?.calendar?.length >= new Date().getMonth() ? userContext.calendar[new Date().getMonth()]?.length : false}>Добавить активность</Button>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
         footer={false}
       >
         <Form layout='vertical' onFinish={handleSubmit}>
-          <Form.Item name='tool' label='Инструмент который вы изучали' rules={[{required: true, message: 'Заполните поле'}]}>
-            <Input />
-          </Form.Item>
           <Form.Item name='activity' label='Активность' rules={[{required: true, message: 'Заполните поле'}]}>
-            <Select>
+            <Select onChange={(i) => i === 'notActive' ? setIsNotActive(true) : setIsNotActive(false)}>
               <Select.Option value='active'>Активный</Select.Option>
               <Select.Option value='notActive'>Не активный</Select.Option>
             </Select>
           </Form.Item>
+          {!isNotActive && (
+            <Form.Item name='tool' label='Инструмент который вы изучали' rules={[{required: true, message: 'Заполните поле'}]}>
+              <Input />
+            </Form.Item>
+          )}
+          {!isNotActive && (
+            <Form.Item label='Время занятий' name='playedTime' rules={[{required: true, message: 'Заполните поле'}]}>
+              <TimePicker/>
+            </Form.Item>
+          )}
+          {!isNotActive && (
+            <Form.Item label="Коментарий" name='comment'>
+              <Input.TextArea/>
+            </Form.Item>
+          )}
           <Button htmlType='submit'>Отправить</Button>
         </Form>
       </Modal>

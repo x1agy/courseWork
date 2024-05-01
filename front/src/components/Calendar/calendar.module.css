@@ -52,6 +52,9 @@
     display: flex;
     align-items: center;
     gap: 0.3em;
+    flex-wrap: wrap;
+    text-wrap: wrap;
+    word-wrap: break-word;
 }
 
 .dropdownItem h3{
