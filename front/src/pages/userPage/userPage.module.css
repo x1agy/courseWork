@@ -13,8 +13,9 @@
         gap: 50px !important;
     }
     :global(.ant-tabs-tab-btn){
+    font-size: 1.5rem !important;
         @media(max-width: 700px){
-            font-size: 1em !important;
+            font-size: 1rem !important;
             gap: 0px !important;
         }
     }
