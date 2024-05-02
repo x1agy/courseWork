@@ -12,6 +12,7 @@ const CalendarComponent = () => {
   const [isNotActive, setIsNotActive] = useState(false);
 
   const handleSubmit = (values) => {
+    setIsModalOpen(false);
     const currentDate = new Date();
     const day = currentDate.getDate();
     const month = currentDate.getMonth();
@@ -60,52 +61,44 @@ const CalendarComponent = () => {
   }
 
   const dateCellRender = (value) => {
-    return (
-      value.map(item => {
-        if(item?.activity === 'active'){
-          const items = [
-            {
-              key: '1',
-              label: (
-                <>
-                  <p className={styles.dropdownItem}>Инструмент: <h3>{item.tool}</h3></p>
-                  <p className={styles.dropdownItem}>Время занятий: <h3>{item.playedTime}</h3></p>
-                  {item?.comment && <p className={styles.dropdownItem}>Коментарий: <h3>{item?.comment}</h3></p>}
-                </>
-              ),
-            },
-          ];
-          return(
-            <ul className={styles.event_active} key={1}>
-              <Dropdown
-                menu={{
-                  items,
-                }}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    Hover me
-                    <DownOutlined />
-                  </Space>
-                </a>
-              </Dropdown>
-            </ul>
-          )
-        }else if (item?.activity === 'notActive'){
-          return(
-            <ul className={styles.events_not_active} key={Math.random()}></ul>
-          )
-        }else{
-          return <></>
-        }
-      })
-    );
+    const item = value[0];
+    if(item?.activity === 'active'){
+      const items = [
+        {
+          key: item.playedTime,
+          label: (
+            <div>
+              <p className={styles.dropdownItem}><strong>Инструмент:</strong> {item.tool}</p>
+              <p className={styles.dropdownItem}><strong>Время занятий:</strong> {new Date(item.playedTime).getMinutes()} минут</p>
+              {item?.comment && <p className={styles.dropdownItem}><strong>Коментарий:</strong> {item?.comment}</p>}
+            </div>
+          ),
+        },
+      ];
+      return(
+        <ul className={styles.event_active} key={item.playedTime}>
+          <Dropdown
+            menu={{
+              items,
+            }}
+          >
+              <DownOutlined />
+          </Dropdown>
+        </ul>
+      )
+    }else if (item?.activity === 'notActive'){
+      return(
+        <ul className={styles.events_not_active} key={Math.random()}></ul>
+      )
+    }else{
+      return <></>
+    }
   };
   
   const onCellRender = (current) => {
-    const findDay = (userContext?.calendar ?? []).length >= current.$M ? userContext?.calendar[current.$M]?.find((_, index) => current.$D === index) : [];
-    if(findDay?.length){
-      return dateCellRender(findDay)
+    const day = userContext?.calendar[current.$M]?.find((_, index) => index === current.$D);
+    if(day?.length > 0 && userContext.password){
+      return dateCellRender(day)
     }
   }
 
@@ -116,7 +109,14 @@ const CalendarComponent = () => {
         className={styles.calendar} 
         cellRender={onCellRender}
       />
-      <Button onClick={() => setIsModalOpen(true)} disabled={userContext?.calendar?.length >= new Date().getMonth() ? userContext.calendar[new Date().getMonth()]?.length : false}>Добавить активность</Button>
+      <Button 
+        onClick={() => setIsModalOpen(true)} 
+        disabled={
+          userContext
+          ?.calendar
+          ?.[new Date().getMonth()]
+          ?.length - 1 === new Date().getDate()
+          }>Добавить активность</Button>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}

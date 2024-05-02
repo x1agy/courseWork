@@ -11,7 +11,7 @@ export const formatWeekDataFromUser = (user) => {
     return user.calendar[lastMonth].map(item => {
         return item.reduce((acc, activity) => ({
             ...acc,
-            [activity.learnedTool]: (acc[activity.learnedTool] ?? 0) + 1 + Math.round(Math.random() * 10)
+            [activity.learnedTool]: (acc[activity.learnedTool] ?? 0) + 1
         }), {})
     })
 }
@@ -25,12 +25,11 @@ export const formatYearDataFromUser = (user) => {
         return []
     }
 
-    return [0,1,2,3,4,5,6,7].map((item, index) => {
-        console.log(item)
-        return ({
-            ['' + item]: item + 1 + Math.round(Math.random() * 10)
-        })
-    })
+    // return [0,1,2,3,4,5,6,7].map((item, index) => {
+    //     return ({
+    //         ['' + item]: item + 1 + Math.round(Math.random() * 10)
+    //     })
+    // })
 
     return user.calendar.map((item, index) => {
         return ({

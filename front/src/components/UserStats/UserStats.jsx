@@ -1,5 +1,5 @@
 import { Tabs, Tooltip } from "antd"
-import { Bar, BarChart, CartesianGrid, Legend } from "recharts"
+import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts"
 import useScreenSize from "../../hooks/useScreenSize";
 import { formatWeekDataFromUser, formatYearDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
@@ -17,16 +17,16 @@ export const UserStats = () => {
         ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]);
     
     const yearData = formatYearDataFromUser(userContext ?? []);
-    console.log(yearData, chartData)
-    
 
     const tabsItems = [
         {
             key: 'part-1',
             label: 'Неделя',
-            children: <BarChart
-                        width={screenSize.width > 700 ? 500 : 400}
-                        height={300}
+            children: (
+                <div className={styles.chart}>
+                    <BarChart
+                        width={screenSize.width > 700 ? 800 : 400}
+                        height={500}
                         data={chartData.slice(-7)}
                         margin={{
                             top: 20,
@@ -35,20 +35,27 @@ export const UserStats = () => {
                             bottom: 30,
                         }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" />
+                        <CartesianGrid strokeDasharray="1 1" />
+                        <XAxis tickFormatter={customDayXAxis}/>
+                        <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
                         {chartDataKeys.map((item, index) => {
                             return(
-                                <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
+                                <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} maxBarSize={50}/>
                             )
                         })}
                     </BarChart>
+                    <h3>На этой неделе процент активных дней у вас составляет: {Math.round(chartData.slice(-7).filter(item => 'undefined' in item).length * 100 / 7)}%</h3>
+                </div>
+            )
         },
         {
             key: 'part-2',        
             label: 'Месяц',
-            children: <BarChart
-                        width={screenSize.width > 700 ? 500 : 400}
-                        height={300}
+            children: (
+                <div className={styles.chart}>
+                    <BarChart
+                        width={screenSize.width > 700 ? 800 : 400}
+                        height={500}
                         data={chartData}
                         margin={{
                             top: 20,
@@ -58,21 +65,27 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis tickFormatter={customDayXAxis}/>
+                        <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
                         {chartDataKeys.map((item, index) => {
                             return(
                                 <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
                             )
                         })}
                     </BarChart>
+                    <h3>В этом месяце процент активных дней у вас составляет: {Math.round(chartData.filter(item => 'undefined' in item).length * 100 / 31)}%</h3>
+                </div>
+            )
         },
         {
             key: 'part-3',
             label: 'Год',
-            children: <BarChart
-                        width={screenSize.width > 700 ? 500 : 400}
-                        height={300}
+            children: (
+                <div className={styles.chart}>
+                    <BarChart
+                        width={screenSize.width > 700 ? 800 : 400}
+                        height={500}
                         data={yearData}
-                        barSize={100}
                         barGap='10px'
                         margin={{
                             top: 20,
@@ -82,6 +95,8 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis tickFormatter={customMonthXAxis}/>
+                        <YAxis />
                         <Tooltip />
                         {yearData.map((_, index) => {
                             return(
@@ -89,6 +104,8 @@ export const UserStats = () => {
                             )
                         })}
                     </BarChart>
+                </div>
+            )
         },
     ]
     
@@ -101,4 +118,14 @@ export const UserStats = () => {
             />
         </>
     )
+}
+
+const customDayXAxis = (rest) => {
+    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()]
+}
+
+const customMonthXAxis = (rest) => {
+    const months = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+    return months[rest]
 }

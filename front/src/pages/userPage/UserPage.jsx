@@ -6,6 +6,7 @@ import styles from './userPage.module.css';
 import { UserStats } from './../../components/UserStats/UserStats';
 import Calendar from "../../components/Calendar/Calendar";
 import { useNavigate } from "react-router-dom";
+import Repertoire from "../../components/Repertoire/Repertoire";
 
 const tabsItems = [
     {
@@ -21,7 +22,7 @@ const tabsItems = [
     {
         key: 'part-3',
         label: 'Репертуар',
-        children: '321'
+        children: <Repertoire />
     },
 ]
 
