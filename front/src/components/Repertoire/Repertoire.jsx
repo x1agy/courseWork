@@ -70,7 +70,7 @@ const Repertoire = () => {
       form.resetFields()
     }
 
-    const tableData = userContext?.repertoire.map(item => {
+    const tableData = userContext?.repertoire?.map(item => {
       const length = Object.values(item).filter(item => !!item?.length).length;
       if(length  < 6) return ({...item, status: 'В планах'});
       else if (length === 6) return ({...item, status: 'В работе'});
