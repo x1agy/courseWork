@@ -59,7 +59,8 @@ const Repertoire = () => {
         setUserContext({...userContext, repertoire: [...(repertoire ?? []), values]});
       }
       setIsOpen(false);
-      selectedField.current = null
+      selectedField.current = null;
+      form.resetFields()
     }
 
     const tableData = userContext?.repertoire.map(item => {
@@ -73,8 +74,9 @@ const Repertoire = () => {
     }}>Изменить</Button>}))
 
     useEffect(() => {
+      form.setFieldValue(userContext?.repertoire?.[selectedField.current])
       form.resetFields();
-    }, [form, isOpen])
+    }, [form, isOpen, selectedField])
 
     return (
         <Flex vertical>
@@ -102,7 +104,7 @@ const Repertoire = () => {
             setIsOpen(true);
           }}>Создать активность</Button>
 
-          <Modal footer={false} open={isOpen} onCancel={() => {
+          <Modal footer={false} open={isOpen} destroyOnClose={true} onCancel={() => {
             setIsOpen(false);
             selectedField.current = null
           }} centered>
