@@ -52,9 +52,16 @@ const Repertoire = () => {
 
     const handleSubmit = (values) => {
       const repertoire = userContext?.repertoire;
-      if(Object.keys(values).length > 5){
-        repertoire.pop()
-        setUserContext({...userContext, repertoire: [...((repertoire) ?? []), values]});
+      const sameObj = userContext?.repertoire?.find((_, index) => index === selectedField.current);
+      if(sameObj?.name){
+        const newRepertoire = repertoire.map(item => {
+          if(JSON.stringify(item) === JSON.stringify(sameObj)){
+            return values
+          }else{
+            return item
+          }
+        })
+        setUserContext({...userContext, repertoire: [...newRepertoire]});
       }else{
         setUserContext({...userContext, repertoire: [...(repertoire ?? []), values]});
       }
@@ -64,7 +71,7 @@ const Repertoire = () => {
     }
 
     const tableData = userContext?.repertoire.map(item => {
-      const length = Object.keys(item).length ;
+      const length = Object.values(item).filter(item => !!item?.length).length;
       if(length  < 6) return ({...item, status: 'В планах'});
       else if (length === 6) return ({...item, status: 'В работе'});
       else return {...item, status: 'Готово'}
@@ -88,12 +95,12 @@ const Repertoire = () => {
                   target: 'sorter-icon',
               }}
               rowClassName={(obj) => {
-                const length = Object.keys(obj).length - 1;
-                if(length < 7){
+                const length = Object.values(obj).filter(item => !!item?.length).length;
+                if(length === 6){
                   return styles.plans
                 }else if(length === 7){
                   return styles.going
-                }else{
+                }else if(length === 8){
                   return styles.complete
                 }
               }}
@@ -113,8 +120,8 @@ const Repertoire = () => {
 
                 {columns.slice(0, 7).map((item, index) => {
                   return (
-                    <Form.Item label={item.title} required={index < 5} name={item.dataIndex} key={index} initialValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex] ?? ''}>
-                      <Input defaultValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex] ?? ''}/>
+                    <Form.Item label={item.title} required={index < 5} name={item.dataIndex} key={index} initialValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex]}>
+                      <Input defaultValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex]}/>
                     </Form.Item>
                   )
                 })}
