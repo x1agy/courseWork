@@ -1,67 +1,126 @@
-import { Table } from "antd";
-import React, { useContext } from "react";
+import { Button, Flex, Form, Input, Modal, Table } from "antd";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
+
+import styles from './Repertoire.module.css';
 
 const columns = [
     {
-      title: 'Name',
+      title: 'Название',
       dataIndex: 'name',
-      showSorterTooltip: {
-        target: 'full-header',
-      },
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Jim',
-          value: 'Jim',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend'],
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      defaultSortOrder: 'descend',
-      sorter: (a, b) => a.age - b.age,
+      title: 'Жанр',
+      dataIndex: 'genre',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      onFilter: (value, record) => record.address.indexOf(value) === 0,
+      title: 'Инструмент',
+      dataIndex: 'tool',
     },
+    {
+      title: 'Композитор',
+      dataIndex: 'compositor',
+    },
+    {
+      title: 'Ссылка',
+      dataIndex: 'musicLink',
+    },
+    {
+      title: 'Стадия',
+      dataIndex: 'asdasd',
+    },
+    {
+      title: 'Ссылка на ноты',
+      dataIndex: 'linkToMusic'
+    },
+    {
+      title: 'Статус',
+      dataIndex: 'status'
+    },
+    {
+      title: '',
+      dataIndex: 'button'
+    }
   ];
 
 const Repertoire = () => {
 
-    const {userContext} = useContext(UserContext);
+    const {userContext, setUserContext} = useContext(UserContext);
+    const [isOpen, setIsOpen] = useState(false);
+    const selectedField = useRef(null)
+    const [form] = Form.useForm();
+
+    const handleSubmit = (values) => {
+      const repertoire = userContext?.repertoire;
+      if(Object.keys(values).length > 5){
+        repertoire.pop()
+        setUserContext({...userContext, repertoire: [...((repertoire) ?? []), values]});
+      }else{
+        setUserContext({...userContext, repertoire: [...(repertoire ?? []), values]});
+      }
+      setIsOpen(false);
+      selectedField.current = null
+    }
+
+    const tableData = userContext?.repertoire.map(item => {
+      const length = Object.keys(item).length ;
+      if(length  < 6) return ({...item, status: 'В планах'});
+      else if (length === 6) return ({...item, status: 'В работе'});
+      else return {...item, status: 'Готово'}
+    }).map((item, index) => ({...item, button: <Button onClick={() => {
+      setIsOpen(true);
+      selectedField.current = index;
+    }}>Изменить</Button>}))
+
+    useEffect(() => {
+      form.resetFields();
+    }, [form, isOpen])
 
     return (
-        <Table
-            columns={columns}
-            dataSource={userContext?.repertoire}
-            showSorterTooltip={{
-                target: 'sorter-icon',
-            }}
-        />
+        <Flex vertical>
+
+          <Table
+              columns={columns}
+              dataSource={tableData}
+              showSorterTooltip={{
+                  target: 'sorter-icon',
+              }}
+              rowClassName={(obj) => {
+                const length = Object.keys(obj).length - 1;
+                if(length < 7){
+                  return styles.plans
+                }else if(length === 7){
+                  return styles.going
+                }else{
+                  return styles.complete
+                }
+              }}
+          />
+
+          <Button onClick={() => {
+            form.resetFields();
+            setIsOpen(true);
+          }}>Создать активность</Button>
+
+          <Modal footer={false} open={isOpen} onCancel={() => {
+            setIsOpen(false);
+            selectedField.current = null
+          }} centered>
+
+              <Form layout="vertical" onFinish={handleSubmit} form={form}>
+
+                {columns.slice(0, 7).map((item, index) => {
+                  return (
+                    <Form.Item label={item.title} required={index < 5} name={item.dataIndex} key={index} initialValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex] ?? ''}>
+                      <Input defaultValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex] ?? ''}/>
+                    </Form.Item>
+                  )
+                })}
+
+                <Button htmlType="submit">Отправить</Button>
+              </Form>
+          </Modal>
+        </Flex>
     )
 }
 

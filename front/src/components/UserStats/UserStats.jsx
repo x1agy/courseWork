@@ -122,7 +122,7 @@ export const UserStats = () => {
 
 const customDayXAxis = (rest) => {
     const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()]
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest + 1) + ')'
 }
 
 const customMonthXAxis = (rest) => {
