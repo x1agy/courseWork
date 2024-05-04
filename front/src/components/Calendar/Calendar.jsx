@@ -5,6 +5,8 @@ import styles from './calendar.module.css';
 import { UserContext } from '../../App';
 import { DownOutlined } from '@ant-design/icons';
 
+const monthsS = ["Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентября","Октября","Ноября","Декабря"];
+
 const CalendarComponent = () => {
   
   const {userContext, setUserContext} = useContext(UserContext);
@@ -99,6 +101,7 @@ const CalendarComponent = () => {
   };
   
   const onCellRender = (current) => {
+    console.log(current)
     const day = userContext?.calendar[current.$M]?.find((_, index) => index === current.$D);
     if(day?.length > 0 && userContext.password){
       return dateCellRender(day, current.$D)
@@ -113,7 +116,7 @@ const CalendarComponent = () => {
         fullscreen={false} 
         className={styles.calendar} 
         fullCellRender={onCellRender}
-        headerRender={({ value, type, onChange, onTypeChange }) => {
+        headerRender={({ value, onChange }) => {
           const start = 0;
           const end = 12;
           const monthOptions = [];
@@ -176,6 +179,9 @@ const CalendarComponent = () => {
                     {monthOptions}
                   </Select>
                 </Col>
+                <Col>
+                    <strong>Сегодня {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
+                </Col>
               </Row>
             </div>
           );
@@ -188,14 +194,14 @@ const CalendarComponent = () => {
           ?.calendar
           ?.[new Date().getMonth()]
           ?.length - 1 === new Date().getDate()
-          }>Добавить активность</Button>
+          }>Добавитя активностя</Button>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
         footer={false}
       >
         <Form layout='vertical' onFinish={handleSubmit}>
-          <Form.Item name='activity' label='Активность' rules={[{required: true, message: 'Заполните поле'}]}>
+          <Form.Item name='activity' label='Активностя' rules={[{required: true, message: 'Заполните поле'}]}>
             <Select onChange={(i) => i === 'notActive' ? setIsNotActive(true) : setIsNotActive(false)}>
               <Select.Option value='active'>Активный</Select.Option>
               <Select.Option value='notActive'>Не активный</Select.Option>
@@ -216,7 +222,7 @@ const CalendarComponent = () => {
               <Input.TextArea/>
             </Form.Item>
           )}
-          <Button htmlType='submit'>Отправить</Button>
+          <Button htmlType='submit'>Отправитя</Button>
         </Form>
       </Modal>
     </Flex>

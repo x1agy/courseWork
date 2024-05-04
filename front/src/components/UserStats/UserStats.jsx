@@ -1,5 +1,5 @@
-import { Tabs, Tooltip } from "antd"
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts"
+import { Tabs } from "antd"
+import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, Tooltip } from "recharts"
 import useScreenSize from "../../hooks/useScreenSize";
 import { formatWeekDataFromUser, formatYearDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
@@ -87,7 +87,6 @@ export const UserStats = () => {
                         width={screenSize.width > 700 ? 800 : 400}
                         height={500}
                         data={yearData}
-                        barGap='10px'
                         margin={{
                             top: 20,
                             right: 30,
@@ -102,7 +101,7 @@ export const UserStats = () => {
                         <Legend />
                         {yearData.map((_, index) => {
                             return(
-                                <Bar key={index} dataKey={index} fill={randomHexColor()} />
+                                <Bar key={index} dataKey={_.name} fill={randomHexColor()} barSize='1000000000000000000' min={100}/>
                             )
                         })}
                     </BarChart>
@@ -123,13 +122,13 @@ export const UserStats = () => {
 }
 
 const customDayXAxis = (rest) => {
-    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()]
+    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+    return dayNames[rest]
 }
 
 const customMonthXAxis = (rest) => {
     const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest + 1) + ')'
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest === 0 ? 30 : rest) + ')'
 }
 
 const customYearXAxis = (rest) => {

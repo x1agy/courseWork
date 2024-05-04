@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Input, Modal, Table } from "antd";
+import { Button, Flex, Form, Input, Modal, Select, Table } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
 
@@ -30,7 +30,7 @@ const columns = [
       dataIndex: 'asdasd',
     },
     {
-      title: 'Ссылка на аудио',
+      title: 'Ссылка на медиа',
       dataIndex: 'linkToMusic'
     },
     {
@@ -43,7 +43,7 @@ const columns = [
     }
   ];
 
-const selectFields = ['разбор', 'шлифовка', 'наизусть']
+const selectFields = ['разбор', 'шлифовка', 'наизусть'];
 
 const Repertoire = () => {
 
@@ -51,6 +51,19 @@ const Repertoire = () => {
     const [isOpen, setIsOpen] = useState(false);
     const selectedField = useRef(null)
     const [form] = Form.useForm();
+
+    const handleDelete = (deleteIndex) => {
+      const repertoire = userContext?.repertoire;
+      const sameObj = userContext?.repertoire?.find((_, index) => index === deleteIndex);
+      const newRepertoire = repertoire.filter(item => {
+        if(JSON.stringify(item) === JSON.stringify(sameObj)){
+          return false
+        }else{
+          return true
+        }
+      })
+      setUserContext({...userContext, repertoire: [...newRepertoire]});
+    }
 
     const handleSubmit = (values) => {
       const repertoire = userContext?.repertoire;
@@ -77,10 +90,17 @@ const Repertoire = () => {
       if(length  < 6) return ({...item, status: 'В планах'});
       else if (length === 6) return ({...item, status: 'В работе'});
       else return {...item, status: 'Готово'}
-    }).map((item, index) => ({...item, button: <Button onClick={() => {
-      setIsOpen(true);
-      selectedField.current = index;
-    }}>Изменить</Button>, key: index}))
+    }).map((item, index) => ({...item, button: (
+      <>
+        <Button onClick={() => {
+          setIsOpen(true);
+          selectedField.current = index;
+        }} style={{marginBottom: '20px', width: '7em'}}>Изменить</Button>
+        <Button type="primary" style={{width: '7em', backgroundColor: 'red'}} onClick={() => handleDelete(index)}>
+          Удалить
+        </Button>
+      </>
+    ), key: index}))
 
     useEffect(() => {
       form.setFieldValue(userContext?.repertoire?.[selectedField.current])
@@ -92,9 +112,11 @@ const Repertoire = () => {
           <Table
               columns={columns}
               dataSource={tableData}
+              style={{textAlign: 'center'}}
               showSorterTooltip={{
                   target: 'sorter-icon',
               }}
+              className={styles.table}
               rowClassName={(obj) => {
                 const length = Object.values(obj).filter(item => !!item?.length).length;
                 if(length === 6){
@@ -109,7 +131,7 @@ const Repertoire = () => {
 
           <Button onClick={() => {
             setIsOpen(true);
-          }}>Создать активность</Button>
+          }}>Добавить произведение</Button>
 
           <Modal footer={false} open={isOpen} destroyOnClose={true} onCancel={() => {
             setIsOpen(false);
@@ -118,21 +140,41 @@ const Repertoire = () => {
 
               <Form layout="vertical" onFinish={handleSubmit} form={form}>
                 {columns.slice(0, String(selectedField.current) === 'null' ? 5 : Object.keys(userContext?.repertoire?.[selectedField.current]).length === 5 ? 6 : 7).map((item, index) => {
-                  return (
-                    <Form.Item 
-                      label={item.title} 
-                      rules={[{min: 3, message: 'Заполните поле'}, {required: true, message: 'Заполните поля'}]} 
-                      name={item.dataIndex} 
-                      key={index} 
-                      initialValue={
-                        userContext
-                        ?.repertoire
-                        ?.[selectedField.current]
-                        ?.[item.dataIndex] ?? ''
-                      }>
-                      <Input/>
-                    </Form.Item>
-                  )
+                  if(item.dataIndex === 'asdasd'){
+                    return (
+                      <Form.Item 
+                        label={item.title} 
+                        rules={[{min: 3, message: 'Заполните поле'}, {required: true, message: 'Заполните поля'}]} 
+                        name={item.dataIndex} 
+                        key={index} 
+                        initialValue={
+                          userContext
+                          ?.repertoire
+                          ?.[selectedField.current]
+                          ?.[item.dataIndex] ?? ''
+                        }>
+                         <Select>
+                          {selectFields.map(item => <Select.Option value={item} >{item}</Select.Option>)}
+                         </Select>
+                      </Form.Item>
+                    )
+                  }else{
+                    return (
+                      <Form.Item 
+                        label={item.title} 
+                        rules={[{min: 3, message: 'Заполните поле'}, {required: true, message: 'Заполните поля'}]} 
+                        name={item.dataIndex} 
+                        key={index} 
+                        initialValue={
+                          userContext
+                          ?.repertoire
+                          ?.[selectedField.current]
+                          ?.[item.dataIndex] ?? ''
+                        }>
+                        <Input/>
+                      </Form.Item>
+                    )
+                  }
                 })}
 
                 <Button htmlType="submit">Отправить</Button>

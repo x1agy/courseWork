@@ -14,7 +14,7 @@ export const formatWeekDataFromUser = (user) => {
             [activity.learnedTool]: (acc[activity.learnedTool] ?? 0) + 1
         }), {})
     })
-    
+
     const length = 7 - data.length;
     if(length){
         for(let i = 0; i <= length; i++){
@@ -33,15 +33,26 @@ export const formatYearDataFromUser = (user) => {
         return []
     }
 
+    const months = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"]
+
     // return [0,1,2,3,4,5,6,7].map((item, index) => {
     //     return ({
     //         ['' + item]: item + 1 + Math.round(Math.random() * 10)
     //     })
     // })
 
-    return user.calendar.map((item, index) => {
+    const data = user.calendar.map((item, index) => {
         return ({
-            [index + '']: item.length
+            [months[index]]: item.length,
+            name: months[index]
         })
     })
+
+    const length = 11 - data.length;
+    if(length){
+        for(let i = 0; i <= length; i++){
+            data.push({});
+        }
+    }
+    return data
 }

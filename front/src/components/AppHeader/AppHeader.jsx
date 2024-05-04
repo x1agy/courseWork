@@ -5,7 +5,7 @@ import { BellOutlined, PhoneOutlined } from '@ant-design/icons';
 import { CgProfile } from "react-icons/cg";
 import { RiTelegramLine } from "react-icons/ri";
 import { BsWhatsapp } from "react-icons/bs";
-import { BarChart, Bar, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, CartesianGrid, Tooltip, Legend, ResponsiveContainer, YAxis } from 'recharts';
 
 import styles from './appHeader.module.css';
 import LoginModal from "../loginModal/LoginModal";
@@ -17,6 +17,7 @@ import Title from "antd/es/typography/Title";
 import { formatWeekDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
 import useScreenSize from './../../hooks/useScreenSize';
+import { XAxis } from 'recharts';
 
 const { Header } = Layout;
 
@@ -29,11 +30,11 @@ const AppHeader = () => {
     const [isUserChangeModalOpen, setIsUserChangeModalOpen] = useState(false);
     const [messageApi, contextHolder] = antdMessage.useMessage();
     const screenSize = useScreenSize(700);
-    const weekChartData = formatWeekDataFromUser(userContext ?? []);
-    const weekChartDataKeys= weekChartData
+    const weekChartData = formatWeekDataFromUser(userContext ?? []).slice(  -7);
+    const weekChartDataKeys= (weekChartData
         ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
-        ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]);
-
+        ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]));
+    const [isRefa, setIsRefa] = useState(false);
     const error = (message) => {
         messageApi.open({
         type: 'error',
@@ -58,6 +59,7 @@ const AppHeader = () => {
         setIsUserChangeModalOpen(true);
         setIsUserModalOpen(false);
     }
+
 
     const handleChange = async (values) => {
         const name = values.fullName.split(' ');
@@ -84,6 +86,8 @@ const AppHeader = () => {
             }
         }
     }
+
+    console.log(userContext)
 
     return(
         <Header className={styles.header}>
@@ -125,7 +129,7 @@ const AppHeader = () => {
             {userContext && (
                 <>
                     <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
-                        <Title>{userContext.fullName}</Title>
+                        <Title>{userContext.fullName ?? userContext.firstName + ' ' + userContext.lastName}</Title>
                         <p key='number'><strong>Номер телефона:</strong> +{userContext.phoneNumber}</p>
                         <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
                         <BarChart
@@ -140,6 +144,8 @@ const AppHeader = () => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis tickFormatter={customDayXAxis}/>
+                            <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
                             {weekChartDataKeys.map((item, index) => {
                                 return(
                                     <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
@@ -148,6 +154,7 @@ const AppHeader = () => {
                         </BarChart>
                         <div className={styles.authorization_buttons}>
                             <Button onClick={handleChangeOpen}>Редактирование</Button>
+                            <Button onClick={() => setIsRefa(true)}>Как оплатить? </Button>
                             <Button onClick={handleQuit}>Выход</Button>
                         </div>
                     </Modal>
@@ -161,10 +168,23 @@ const AppHeader = () => {
                     >
                         {contextHolder}
                     </AppModal>
+                    <Modal open={isRefa} onCancel={() => setIsRefa(false)} footer={false} style={{textAlign: 'center'}}>
+                        <Title>Как оплатить занятие?</Title>
+                        <p>Оплата занятия возможна по системе быстрых платежей по реквизитам ниже. Обратите внимание: перед совершением перевода необходимо проверить корректность введенных данных получателя: номер телефона и ФИО. </p>
+                        <Title>Реквизиты для перевода</Title>
+                        <p>Номер телефона: <br />+7-900-000-00-00 <br />
+ФИО: Иванов Иван Иванович</p>
+                        <p>Название банка: ЦБРФСР</p>
+                    </Modal>
                 </>
             )}
         </Header>
     )
 }
+
+const customDayXAxis = (rest) => {
+    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    return dayNames[rest]
+  }
 
 export default AppHeader;
