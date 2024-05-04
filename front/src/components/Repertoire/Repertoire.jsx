@@ -78,11 +78,10 @@ const Repertoire = () => {
     }).map((item, index) => ({...item, button: <Button onClick={() => {
       setIsOpen(true);
       selectedField.current = index;
-    }}>Изменить</Button>}))
+    }}>Изменить</Button>, key: index}))
 
     useEffect(() => {
       form.setFieldValue(userContext?.repertoire?.[selectedField.current])
-      form.resetFields();
     }, [form, isOpen, selectedField])
 
     return (
@@ -107,7 +106,6 @@ const Repertoire = () => {
           />
 
           <Button onClick={() => {
-            form.resetFields();
             setIsOpen(true);
           }}>Создать активность</Button>
 
@@ -117,11 +115,20 @@ const Repertoire = () => {
           }} centered>
 
               <Form layout="vertical" onFinish={handleSubmit} form={form}>
-
-                {columns.slice(0, 7).map((item, index) => {
+                {columns.slice(0, String(selectedField.current) === 'null' ? 5 : Object.keys(userContext?.repertoire?.[selectedField.current]).length === 5 ? 6 : 7).map((item, index) => {
                   return (
-                    <Form.Item label={item.title} required={index < 5} name={item.dataIndex} key={index} initialValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex]}>
-                      <Input defaultValue={userContext?.repertoire?.[selectedField.current]?.[item.dataIndex]}/>
+                    <Form.Item 
+                      label={item.title} 
+                      rules={[{min: 3, message: 'Заполните поле'}, {required: true, message: 'Заполните поля'}]} 
+                      name={item.dataIndex} 
+                      key={index} 
+                      initialValue={
+                        userContext
+                        ?.repertoire
+                        ?.[selectedField.current]
+                        ?.[item.dataIndex] ?? ''
+                      }>
+                      <Input/>
                     </Form.Item>
                   )
                 })}
