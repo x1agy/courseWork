@@ -197,7 +197,7 @@ const CalendarComponent = () => {
           ?.calendar
           ?.[new Date().getMonth()]
           ?.length - 1 === new Date().getDate()
-          }>Добавитя активностя</Button>
+          }>Добавить активность</Button>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
@@ -225,7 +225,7 @@ const CalendarComponent = () => {
               <Input.TextArea/>
             </Form.Item>
           )}
-          <Button htmlType='submit'>Отправитя</Button>
+          <Button htmlType='submit'>Отправить</Button>
         </Form>
       </Modal>
     </Flex>
