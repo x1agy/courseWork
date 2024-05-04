@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Badge, Button, Calendar, Dropdown, Flex, Form, Input, Modal, Select, Space, TimePicker } from 'antd';
+import { Button, Calendar, Dropdown, Flex, Form, Input, Modal, Select, TimePicker } from 'antd';
 
 import styles from './calendar.module.css';
 import { UserContext } from '../../App';

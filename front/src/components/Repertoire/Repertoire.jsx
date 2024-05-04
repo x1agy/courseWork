@@ -82,7 +82,7 @@ const Repertoire = () => {
 
     useEffect(() => {
       form.setFieldValue(userContext?.repertoire?.[selectedField.current])
-    }, [form, isOpen, selectedField])
+    }, [form, isOpen, selectedField, userContext?.repertoire])
 
     return (
         <Flex vertical>
