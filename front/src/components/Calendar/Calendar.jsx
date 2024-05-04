@@ -93,7 +93,10 @@ const CalendarComponent = () => {
       )
     }else if (item?.activity === 'notActive'){
       return(
-        <ul className={styles.events_not_active} key={Math.random()}><strong>{dedede}</strong></ul>
+        <>
+          <ul className={styles.events_not_active} key={Math.random()}></ul>
+            <strong>{dedede}</strong>
+        </>
       )
     }else{
       return <><strong>{dedede}</strong></>
@@ -102,7 +105,7 @@ const CalendarComponent = () => {
   
   const onCellRender = (current) => {
     console.log(current)
-    const day = userContext?.calendar[current.$M]?.find((_, index) => index === current.$D);
+    const day = userContext?.calendar?.[current.$M]?.find((_, index) => index === current.$D);
     if(day?.length > 0 && userContext.password){
       return dateCellRender(day, current.$D)
     }else{
