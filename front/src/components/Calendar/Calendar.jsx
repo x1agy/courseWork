@@ -60,7 +60,7 @@ const CalendarComponent = () => {
       )
   }
 
-  const dateCellRender = (value) => {
+  const dateCellRender = (value, dedede) => {
     const item = value[0];
     if(item?.activity === 'active'){
       const items = [
@@ -76,7 +76,8 @@ const CalendarComponent = () => {
         },
       ];
       return(
-        <ul className={styles.event_active} key={item.playedTime}>
+        <>
+          <ul className={styles.event_active} key={item.playedTime}>
           <Dropdown
             menu={{
               items,
@@ -85,20 +86,24 @@ const CalendarComponent = () => {
               <DownOutlined />
           </Dropdown>
         </ul>
+        <strong>{dedede}</strong>
+        </>
       )
     }else if (item?.activity === 'notActive'){
       return(
-        <ul className={styles.events_not_active} key={Math.random()}></ul>
+        <ul className={styles.events_not_active} key={Math.random()}><strong>{dedede}</strong></ul>
       )
     }else{
-      return <></>
+      return <><strong>{dedede}</strong></>
     }
   };
   
   const onCellRender = (current) => {
     const day = userContext?.calendar[current.$M]?.find((_, index) => index === current.$D);
     if(day?.length > 0 && userContext.password){
-      return dateCellRender(day)
+      return dateCellRender(day, current.$D)
+    }else{
+      return <strong>{current.$D}</strong>
     }
   }
 
@@ -107,7 +112,7 @@ const CalendarComponent = () => {
       <Calendar 
         fullscreen={false} 
         className={styles.calendar} 
-        cellRender={onCellRender}
+        fullCellRender={onCellRender}
       />
       <Button 
         onClick={() => setIsModalOpen(true)} 

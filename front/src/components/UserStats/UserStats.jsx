@@ -12,6 +12,7 @@ export const UserStats = () => {
     const {userContext} = useContext(UserContext);
     const screenSize = useScreenSize(700);
     const chartData = formatWeekDataFromUser(userContext ?? []);
+
     const chartDataKeys= chartData
         ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
         ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]);
@@ -65,7 +66,7 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis tickFormatter={customDayXAxis}/>
+                        <XAxis tickFormatter={customMonthXAxis}/>
                         <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
                         {chartDataKeys.map((item, index) => {
                             return(
@@ -95,9 +96,10 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis tickFormatter={customMonthXAxis}/>
+                        <XAxis tickFormatter={customYearXAxis}/>
                         <YAxis />
                         <Tooltip />
+                        <Legend />
                         {yearData.map((_, index) => {
                             return(
                                 <Bar key={index} dataKey={index} fill={randomHexColor()} />
@@ -122,10 +124,15 @@ export const UserStats = () => {
 
 const customDayXAxis = (rest) => {
     const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest + 1) + ')'
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()]
 }
 
 const customMonthXAxis = (rest) => {
+    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest + 1) + ')'
+}
+
+const customYearXAxis = (rest) => {
     const months = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
     return months[rest]
 }

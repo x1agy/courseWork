@@ -22,7 +22,7 @@ const columns = [
       dataIndex: 'compositor',
     },
     {
-      title: 'Ссылка',
+      title: 'Ссылка на ноты',
       dataIndex: 'musicLink',
     },
     {
@@ -30,7 +30,7 @@ const columns = [
       dataIndex: 'asdasd',
     },
     {
-      title: 'Ссылка на ноты',
+      title: 'Ссылка на аудио',
       dataIndex: 'linkToMusic'
     },
     {
@@ -42,6 +42,8 @@ const columns = [
       dataIndex: 'button'
     }
   ];
+
+const selectFields = ['разбор', 'шлифовка', 'наизусть']
 
 const Repertoire = () => {
 
