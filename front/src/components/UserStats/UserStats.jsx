@@ -43,7 +43,7 @@ export const UserStats = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="1 1" />
-                        <XAxis tickFormatter={customDayXAxis}/>
+                        <XAxis tickFormatter={(a) => customDayXAxis(a, chartData)}/>
                         <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
                         {chartDataKeys.map((item, index) => {
                             return(
@@ -125,9 +125,10 @@ export const UserStats = () => {
     )
 }
 
-const customDayXAxis = (rest) => {
+const customDayXAxis = (rest, chartData) => {
+    const length = chartData?.length - 1;
     const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay() + 1] ?? dayNames[0]
+    return dayNames[new Date(`${new Date().getMonth()}/${length - rest - 1}/2024`).getDay() + 1] ?? dayNames[0]
 }
 
 const customMonthXAxis = (rest) => {

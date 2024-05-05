@@ -27,7 +27,27 @@ const CalendarComponent = () => {
       for(let i = 0; i < day; i++){
         dayArray.push([]);
       }
-      setUserContext({...userContext, calendar: [...array, [...dayArray, [{tool: values.tool, activity: values.activity, comment: values.comment, playedTime: values.playedTime }]]]})
+      setUserContext(
+        {
+          ...userContext, 
+          calendar: 
+            [
+              ...array, 
+              [
+                ...dayArray, 
+                [
+                  {
+                    tool: values.tool, 
+                    activity: values.activity, 
+                    comment: values.comment, 
+                    playedTime: values.playedTime,
+                    proizvedenie: values.proizvedenie
+                  }
+                ]
+              ]
+            ]
+        }
+      )
       return
     }
     if(userContext.calendar.length - 1 < month){
@@ -53,7 +73,8 @@ const CalendarComponent = () => {
                   tool: values.tool, 
                   activity: values.activity,
                   comment: values?.comment,
-                  playedTime: values.playedTime
+                  playedTime: values.playedTime,
+                  proizvedenie: values?.proizvedenie
                 }
               ]
             ]
@@ -70,6 +91,7 @@ const CalendarComponent = () => {
           key: item.playedTime,
           label: (
             <div>
+              <p className={styles.dropdownItem}><strong>Произведение: </strong>{item.proizvedenie}</p>
               <p className={styles.dropdownItem}><strong>Инструмент:</strong> {item.tool}</p>
               <p className={styles.dropdownItem}><strong>Время занятий:</strong> {new Date(item.playedTime).getMinutes()} минут</p>
               {item?.comment && <p className={styles.dropdownItem}><strong>Коментарий:</strong> {item?.comment}</p>}
