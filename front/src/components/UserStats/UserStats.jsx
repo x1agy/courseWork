@@ -131,7 +131,7 @@ const customDayXAxis = (rest) => {
 }
 
 const customMonthXAxis = (rest) => {
-    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest === 0 ? 30 : rest) + ')'
 }
 

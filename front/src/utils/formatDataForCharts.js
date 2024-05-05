@@ -69,7 +69,7 @@ export const formatYearDataFromUser = (user) => {
 
     const data = user.calendar.map((item, index) => {
         return ({
-            [months[index]]: item.length,
+            [months[index]]: item.filter(day => day.length).length,
             name: months[index]
         })
     })

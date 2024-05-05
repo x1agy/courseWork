@@ -86,9 +86,6 @@ const AppHeader = () => {
             }
         }
     }
-
-    console.log(userContext)
-
     return(
         <Header className={styles.header}>
             <Logo className={styles.logo}/>
@@ -130,7 +127,7 @@ const AppHeader = () => {
                 <>
                     <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
                         <Title>{userContext.fullName ?? userContext.firstName + ' ' + userContext.lastName}</Title>
-                        <p key='number'><strong>Номер телефона:</strong> +{userContext.phoneNumber}</p>
+                        <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
                         <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
                         <BarChart
                             width={screenSize.width > 700 ? 500 : 400}
@@ -183,7 +180,7 @@ const AppHeader = () => {
 }
 
 const customDayXAxis = (rest) => {
-    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay() + 1] ?? dayNames[0]
 }
 
