@@ -181,9 +181,6 @@ const CalendarComponent = () => {
                     {monthOptions}
                   </Select>
                 </Col>
-                <Col>
-                    <strong>Сегодня {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
-                </Col>
               </Row>
             </div>
           );
@@ -197,6 +194,9 @@ const CalendarComponent = () => {
           ?.[new Date().getMonth()]
           ?.length - 1 === new Date().getDate()
           }>Добавить активность</Button>
+      <Col>
+          <strong>Сегодня {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
+      </Col>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
@@ -217,6 +217,19 @@ const CalendarComponent = () => {
           {!isNotActive && (
             <Form.Item label='Время занятий' name='playedTime' rules={[{required: true, message: 'Заполните поле'}]}>
               <TimePicker/>
+            </Form.Item>
+          )}
+          {!isNotActive && (
+            <Form.Item label='Произведение' name='proizvedenie' rules={[{required: true, message: 'Заполните поле'}]}>
+              {
+                userContext?.repertoire?.length ? (
+                  <Select>
+                    {userContext?.repertoire?.map(item => <Select.Option value={item.name}>{item.name}</Select.Option>)}
+                  </Select>
+                ) : (
+                  <h3>Добавьте произведение в репертуар</h3>
+                )
+              }
             </Form.Item>
           )}
           {!isNotActive && (

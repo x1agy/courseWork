@@ -68,7 +68,7 @@ const AppModal = ({
                 })}
                 <Form.Item>
                     <Button type="primary" htmlType="submit" style={{marginInlineEnd: '1em', width: fullWidth ? '100%' : ''}}>Отправить</Button>
-                    {fields.length === 2 && <Button onClick={changePassword}>Забыли пароль?</Button>}
+                    {(fields.length === 2 && title !== 'Восстановление пароля') && <Button onClick={changePassword}>Забыли пароль?</Button>}
                 </Form.Item>
             </Form>
         </Modal>

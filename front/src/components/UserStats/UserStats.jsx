@@ -126,7 +126,7 @@ export const UserStats = () => {
 }
 
 const customDayXAxis = (rest) => {
-    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay() + 1] ?? dayNames[0]
 }
 
@@ -136,6 +136,6 @@ const customMonthXAxis = (rest) => {
 }
 
 const customYearXAxis = (rest) => {
-    const months = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+    const months = ["Янв", "Февр", "Март", "Апр", "Май", "Июнь", "Июль", "Авг", "Сент", "Окт", 'Ноябрь', "Дек"];
     return months[rest]
 }
