@@ -183,8 +183,8 @@ const AppHeader = () => {
 }
 
 const customDayXAxis = (rest) => {
-    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    return dayNames[rest]
-  }
+    const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay() + 1] ?? dayNames[0]
+}
 
 export default AppHeader;

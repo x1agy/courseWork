@@ -1,7 +1,7 @@
 import { Tabs } from "antd"
 import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, Tooltip } from "recharts"
 import useScreenSize from "../../hooks/useScreenSize";
-import { formatWeekDataFromUser, formatYearDataFromUser } from "../../utils/formatDataForCharts";
+import { formatMonthDataFromUser, formatWeekDataFromUser, formatYearDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
 import { useContext } from "react";
 import { UserContext } from "../../App";
@@ -12,6 +12,12 @@ export const UserStats = () => {
     const {userContext} = useContext(UserContext);
     const screenSize = useScreenSize(700);
     const chartData = formatWeekDataFromUser(userContext ?? []);
+
+    const monthChartData = formatMonthDataFromUser(userContext ?? []);
+
+    const monthDataKeys= monthChartData
+        ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
+        ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]);
 
     const chartDataKeys= chartData
         ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
@@ -57,7 +63,7 @@ export const UserStats = () => {
                     <BarChart
                         width={screenSize.width > 700 ? 800 : 400}
                         height={500}
-                        data={chartData}
+                        data={monthChartData}
                         margin={{
                             top: 20,
                             right: 30,
@@ -68,7 +74,7 @@ export const UserStats = () => {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis tickFormatter={customMonthXAxis}/>
                         <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
-                        {chartDataKeys.map((item, index) => {
+                        {monthDataKeys.map((item, index) => {
                             return(
                                 <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
                             )
@@ -97,8 +103,6 @@ export const UserStats = () => {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis tickFormatter={customYearXAxis}/>
                         <YAxis />
-                        <Tooltip />
-                        <Legend />
                         {yearData.map((_, index) => {
                             return(
                                 <Bar key={index} dataKey={_.name} fill={randomHexColor()} barSize='1000000000000000000' min={100}/>
@@ -123,7 +127,7 @@ export const UserStats = () => {
 
 const customDayXAxis = (rest) => {
     const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-    return dayNames[rest]
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay() + 1] ?? dayNames[0]
 }
 
 const customMonthXAxis = (rest) => {

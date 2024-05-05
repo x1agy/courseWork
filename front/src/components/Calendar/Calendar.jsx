@@ -27,7 +27,7 @@ const CalendarComponent = () => {
       for(let i = 0; i < day; i++){
         dayArray.push([]);
       }
-      setUserContext({...userContext, calendar: [...array, [...dayArray, [{tool: values.tool, activity: values.activity}]]]})
+      setUserContext({...userContext, calendar: [...array, [...dayArray, [{tool: values.tool, activity: values.activity, comment: values.comment, playedTime: values.playedTime }]]]})
       return
     }
     if(userContext.calendar.length - 1 < month){
@@ -104,7 +104,6 @@ const CalendarComponent = () => {
   };
   
   const onCellRender = (current) => {
-    console.log(current)
     const day = userContext?.calendar?.[current.$M]?.find((_, index) => index === current.$D);
     if(day?.length > 0 && userContext.password){
       return dateCellRender(day, current.$D)
@@ -204,7 +203,7 @@ const CalendarComponent = () => {
         footer={false}
       >
         <Form layout='vertical' onFinish={handleSubmit}>
-          <Form.Item name='activity' label='Активностя' rules={[{required: true, message: 'Заполните поле'}]}>
+          <Form.Item name='activity' label='Активность' rules={[{required: true, message: 'Заполните поле'}]}>
             <Select onChange={(i) => i === 'notActive' ? setIsNotActive(true) : setIsNotActive(false)}>
               <Select.Option value='active'>Активный</Select.Option>
               <Select.Option value='notActive'>Не активный</Select.Option>
