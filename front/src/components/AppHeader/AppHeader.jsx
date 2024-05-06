@@ -5,7 +5,7 @@ import { BellOutlined, PhoneOutlined } from '@ant-design/icons';
 import { CgProfile } from "react-icons/cg";
 import { RiTelegramLine } from "react-icons/ri";
 import { BsWhatsapp } from "react-icons/bs";
-import { BarChart, Bar, CartesianGrid, Tooltip, Legend, ResponsiveContainer, YAxis } from 'recharts';
+import { BarChart, Bar, CartesianGrid, YAxis } from 'recharts';
 
 import styles from './appHeader.module.css';
 import LoginModal from "../loginModal/LoginModal";
@@ -24,17 +24,23 @@ const { Header } = Layout;
 const AppHeader = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalType, setModalType] = useState('');
-    const {userContext, setUserContext} = useContext(UserContext);
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
     const [isUserChangeModalOpen, setIsUserChangeModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [modalType, setModalType] = useState('');
+
+    const {userContext, setUserContext} = useContext(UserContext);
+
     const [messageApi, contextHolder] = antdMessage.useMessage();
+
     const screenSize = useScreenSize(700);
+
     const weekChartData = formatWeekDataFromUser(userContext ?? []).slice(  -7);
+
     const weekChartDataKeys= (weekChartData
         ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
         ?.reduce((acc, item) => acc.includes(item) ? acc : [...acc, item],[]));
-    const [isRefa, setIsRefa] = useState(false);
+
     const error = (message) => {
         messageApi.open({
         type: 'error',
@@ -141,7 +147,7 @@ const AppHeader = () => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis tickFormatter={customDayXAxis}/>
+                            <XAxis tickFormatter={(a) => customDayXAxis(a, weekChartData)}/>
                             <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
                             {weekChartDataKeys.map((item, index) => {
                                 return(
@@ -151,7 +157,7 @@ const AppHeader = () => {
                         </BarChart>
                         <div className={styles.authorization_buttons}>
                             <Button onClick={handleChangeOpen}>Редактирование</Button>
-                            <Button onClick={() => setIsRefa(true)}>Как оплатить? </Button>
+                            <Button onClick={() => setIsPaymentModalOpen(true)}>Как оплатить? </Button>
                             <Button onClick={handleQuit}>Выход</Button>
                         </div>
                     </Modal>
@@ -165,7 +171,7 @@ const AppHeader = () => {
                     >
                         {contextHolder}
                     </AppModal>
-                    <Modal open={isRefa} onCancel={() => setIsRefa(false)} footer={false} style={{textAlign: 'center'}}>
+                    <Modal open={isPaymentModalOpen} onCancel={() => setIsPaymentModalOpen(false)} footer={false} style={{textAlign: 'center'}}>
                         <Title>Как оплатить занятие?</Title>
                         <p>Оплата занятия возможна по системе быстрых платежей по реквизитам ниже. Обратите внимание: перед совершением перевода необходимо проверить корректность введенных данных получателя: номер телефона и ФИО. </p>
                         <Title>Реквизиты для перевода</Title>
@@ -179,9 +185,10 @@ const AppHeader = () => {
     )
 }
 
-const customDayXAxis = (rest) => {
+const customDayXAxis = (rest, chartData) => {
+    const length = chartData?.length - 6;
     const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay() + 1] ?? dayNames[0]
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay()]
 }
 
 export default AppHeader;

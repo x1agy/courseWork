@@ -1,5 +1,5 @@
 import { Tabs } from "antd"
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, Tooltip } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import useScreenSize from "../../hooks/useScreenSize";
 import { formatMonthDataFromUser, formatWeekDataFromUser, formatYearDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
@@ -126,13 +126,14 @@ export const UserStats = () => {
 }
 
 const customDayXAxis = (rest, chartData) => {
-    const length = chartData?.length - 1;
+    const length = chartData?.length - 6;
     const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    return dayNames[new Date(`${new Date().getMonth()}/${length - rest - 1}/2024`).getDay() + 1] ?? dayNames[0]
+    return dayNames[new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay()]
 }
 
 const customMonthXAxis = (rest) => {
     const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    // eslint-disable-next-line
     return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest === 0 ? 30 : rest) + ')'
 }
 

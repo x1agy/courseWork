@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Button, Calendar, Col, Dropdown, Flex, Form, Input, Modal, Radio, Row, Select, TimePicker, Typography } from 'antd';
+import { Button, Calendar, Col, Dropdown, Flex, Form, Input, Modal, Row, Select, TimePicker } from 'antd';
 
 import styles from './calendar.module.css';
 import { UserContext } from '../../App';
@@ -246,7 +246,7 @@ const CalendarComponent = () => {
               {
                 userContext?.repertoire?.length ? (
                   <Select>
-                    {userContext?.repertoire?.map(item => <Select.Option value={item.name}>{item.name}</Select.Option>)}
+                    {userContext?.repertoire?.map((item, key) => <Select.Option value={item.name}>{item.name}</Select.Option>)}
                   </Select>
                 ) : (
                   <h3>Добавьте произведение в репертуар</h3>
