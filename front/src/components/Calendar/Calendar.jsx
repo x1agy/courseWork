@@ -208,6 +208,9 @@ const CalendarComponent = () => {
           );
         }}
       />
+      <Col>
+          <strong>Сегодня {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
+      </Col>
       <Button 
         onClick={() => setIsModalOpen(true)} 
         disabled={
@@ -216,9 +219,6 @@ const CalendarComponent = () => {
           ?.[new Date().getMonth()]
           ?.length - 1 === new Date().getDate()
           }>Добавить активность</Button>
-      <Col>
-          <strong>Сегодня {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
-      </Col>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
