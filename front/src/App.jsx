@@ -73,7 +73,8 @@ const App = () => {
         }else{
             localStorage.setItem('all-users', JSON.stringify(allUsers.filter(user => !user?.role)));
         }
-    }, [userContext, allUsers])
+    }, [userContext])
+
     return(
         <AllUserContext.Provider value={allUsers}>
             <UserContext.Provider value={{userContext, setUserContext}}>
