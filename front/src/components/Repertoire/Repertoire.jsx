@@ -47,7 +47,6 @@ const selectFields = ['разбор', 'шлифовка', 'наизусть'];
 
 const Repertoire = ({userContextProp}) => {
 
-    console.log(userContextProp)
     const {userContext: globalUserContext, setUserContext} = useContext(UserContext);
     let userContext = userContextProp ?? globalUserContext
     const [isOpen, setIsOpen] = useState(false);

@@ -6,8 +6,6 @@ export const UsersRepertoire = ({allUsers}) => {
 
     const [selectedUser, setSelectedUser] = useState();
 
-    const a = allUsers.find(user => user?._id === selectedUser?._id) ?? allUsers[0];
-
     useEffect(() => {
         let clone = {}; 
 
@@ -42,7 +40,7 @@ export const UsersRepertoire = ({allUsers}) => {
                             </Select.Option>
                         ))}
                     </Select>
-                    <Repertoire userContextProp={a}/>
+                    <Repertoire userContextProp={allUsers.find(user => user?._id === selectedUser?._id) ?? allUsers[0]}/>
                 </>
             )}
         </>
