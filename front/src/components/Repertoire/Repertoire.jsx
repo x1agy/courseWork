@@ -45,9 +45,10 @@ const columns = [
 
 const selectFields = ['разбор', 'шлифовка', 'наизусть'];
 
-const Repertoire = () => {
+const Repertoire = ({userContextProp}) => {
 
-    const {userContext, setUserContext} = useContext(UserContext);
+    const {userContext: globalUserContext, setUserContext} = useContext(UserContext);
+    let userContext = userContextProp ?? globalUserContext
     const [isOpen, setIsOpen] = useState(false);
     const selectedField = useRef(null)
     const [form] = Form.useForm();

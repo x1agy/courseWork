@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import AppLayout from "./layouts/appLayout/AppLayout.jsx";
 import PageNotFound from "./pages/notFound/PageNotFound.jsx";
 import {
@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 import Home from "./pages/home/Home.jsx";
 import { UserPage } from "./pages/userPage/UserPage.jsx";
-import { editUser } from "./utils/api.js";
+import { editUser, getAllUsers } from "./utils/api.js";
+import { TeacherPage } from "./pages/teacherPage/TeacherPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -19,40 +20,68 @@ const router = createBrowserRouter([
         path: '/user-page',
         element: <UserPage />,
         errorElement: <PageNotFound />,
-        children: [
-            {
-                path: 'stats',
-                element: <UserPage />
-            }
-        ]
+    },
+    {
+        path: '/teacher-page',
+        element: <TeacherPage />,
+        errorElement: <PageNotFound />,
     }
 ])
 
 export const UserContext = createContext();
 
+export const AllUserContext = createContext();
+
 const initialState = JSON.parse(localStorage.getItem('user'));
+
+const allUsersInitialState = JSON.parse(localStorage.getItem('all-users')) ?? [];
 
 const App = () => {
 
     const [userContext, setUserContex] = useState(initialState);
+    const [allUsers, setAllUsers] = useState(allUsersInitialState);
 
     const setUserContext = async (user) => {
         if(user === null){
             setUserContex(null)
             return
         }
-        setUserContex(user);
-        localStorage.setItem('user', JSON.stringify(user));
+        if(userContext?.role){
+            setAllUsers(prev => prev.map(item => {
+                if(item._id === user._id){
+                    return user
+                }
+                return item
+            }))
+        }else{
+            setUserContex(user);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
         const response = await editUser(user);
         return response
     }
 
+    useEffect(() => {
+        const func = async () => {
+            const response = await getAllUsers();
+            setAllUsers(response.filter(user => !user?.role));
+            localStorage.setItem('all-users', JSON.stringify(response.filter(user => !user?.role)));
+        }
+
+        if(userContext?.role && allUsers.length === 0){
+            func()
+        }else{
+            localStorage.setItem('all-users', JSON.stringify(allUsers.filter(user => !user?.role)));
+        }
+    }, [userContext, allUsers])
     return(
-        <UserContext.Provider value={{userContext, setUserContext}}>
-            <AppLayout>
-                <RouterProvider router={router} />
-            </AppLayout>
-        </UserContext.Provider>
+        <AllUserContext.Provider value={allUsers}>
+            <UserContext.Provider value={{userContext, setUserContext}}>
+                <AppLayout>
+                    <RouterProvider router={router} />
+                </AppLayout>
+            </UserContext.Provider>
+        </AllUserContext.Provider>
     )
 }
 

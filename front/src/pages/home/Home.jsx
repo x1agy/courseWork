@@ -14,7 +14,11 @@ const Home = () => {
 
     useEffect(() => {
         if(userContext?.login){
-            navigate('/user-page');
+            if(!userContext?.role){
+                navigate('/user-page');
+            }else{
+                navigate('/teacher-page');
+            }
         }
     }, [userContext, navigate])
     return(

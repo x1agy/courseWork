@@ -11,7 +11,7 @@ import styles from './appHeader.module.css';
 import LoginModal from "../loginModal/LoginModal";
 import { UserContext } from "../../App";
 import AppModal from "../UI/appModal/AppModal";
-import { editUserFields } from "../../utils/formFields";
+import { editTeacherFields, editUserFields } from "../../utils/formFields";
 import { checkIsUserExist, editUser } from "../../utils/api";
 import Title from "antd/es/typography/Title";
 import { formatWeekDataFromUser } from "../../utils/formatDataForCharts";
@@ -58,7 +58,8 @@ const AppHeader = () => {
     const handleQuit = () => {
         setUserContext(null);
         setIsUserModalOpen(false);
-        localStorage.setItem('user', JSON.stringify(null))
+        localStorage.setItem('user', JSON.stringify(null));
+        localStorage.setItem('all-users', JSON.stringify(null));
     }
 
     const handleChangeOpen = () => {
@@ -68,7 +69,7 @@ const AppHeader = () => {
 
 
     const handleChange = async (values) => {
-        const name = values.fullName.split(' ');
+        const name = values?.fullName.split(' ');
         const formattedUser = {...values, firstName: name[1], lastName: name[0], surname: name[2] ?? ''}
         const newProfile = {...userContext, ...formattedUser};
 
@@ -129,58 +130,80 @@ const AppHeader = () => {
                 modalType={modalType} 
                 setModalType={(type) => setModalType(type)}
             />
-            {userContext && (
-                <>
-                    <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
-                        <Title>{userContext.fullName ?? userContext.firstName + ' ' + userContext.lastName}</Title>
-                        <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
-                        <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
-                        <BarChart
-                            width={screenSize.width > 700 ? 500 : 400}
-                            height={300}
-                            data={weekChartData}
-                            margin={{
-                                top: 20,
-                                right: 30,
-                                left: 20,
-                                bottom: 30,
-                            }}
+            {(!userContext?.role && userContext) ? (
+                    <>
+                        <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
+                            <Title>{userContext?.fullName ?? userContext?.firstName + ' ' + userContext?.lastName}</Title>
+                            <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
+                            <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
+                            <BarChart
+                                width={screenSize.width > 700 ? 500 : 400}
+                                height={300}
+                                data={weekChartData}
+                                margin={{
+                                    top: 20,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 30,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis tickFormatter={(a) => customDayXAxis(a, weekChartData)}/>
+                                <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
+                                {weekChartDataKeys.map((item, index) => {
+                                    return(
+                                        <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
+                                    )
+                                })}
+                            </BarChart>
+                            <div className={styles.authorization_buttons}>
+                                <Button onClick={handleChangeOpen}>Редактирование</Button>
+                                <Button onClick={() => setIsPaymentModalOpen(true)}>Как оплатить? </Button>
+                                <Button onClick={handleQuit}>Выход</Button>
+                            </div>
+                        </Modal>
+                        <AppModal 
+                            open={isUserChangeModalOpen} 
+                            handleClose={() => setIsUserChangeModalOpen(false)} 
+                            fields={editUserFields.map(item => ({...item, defaultValue: userContext[item.name]}))} 
+                            footer={false}
+                            fullWidth
+                            handleSubmit={handleChange}
                         >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis tickFormatter={(a) => customDayXAxis(a, weekChartData)}/>
-                            <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
-                            {weekChartDataKeys.map((item, index) => {
-                                return(
-                                    <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
-                                )
-                            })}
-                        </BarChart>
-                        <div className={styles.authorization_buttons}>
-                            <Button onClick={handleChangeOpen}>Редактирование</Button>
-                            <Button onClick={() => setIsPaymentModalOpen(true)}>Как оплатить? </Button>
-                            <Button onClick={handleQuit}>Выход</Button>
-                        </div>
-                    </Modal>
-                    <AppModal 
-                        open={isUserChangeModalOpen} 
-                        handleClose={() => setIsUserChangeModalOpen(false)} 
-                        fields={editUserFields.map(item => ({...item, defaultValue: userContext[item.name]}))} 
-                        footer={false}
-                        fullWidth
-                        handleSubmit={handleChange}
-                    >
-                        {contextHolder}
-                    </AppModal>
-                    <Modal open={isPaymentModalOpen} onCancel={() => setIsPaymentModalOpen(false)} footer={false} style={{textAlign: 'center'}}>
-                        <Title>Как оплатить занятие?</Title>
-                        <p>Оплата занятия возможна по системе быстрых платежей по реквизитам ниже. Обратите внимание: перед совершением перевода необходимо проверить корректность введенных данных получателя: номер телефона и ФИО. </p>
-                        <Title>Реквизиты для перевода</Title>
-                        <p>Номер телефона: <br />+7-900-000-00-00 <br />
-ФИО: Иванов Иван Иванович</p>
-                        <p>Название банка: ЦБРФСР</p>
-                    </Modal>
-                </>
-            )}
+                            {contextHolder}
+                        </AppModal>
+                        <Modal open={isPaymentModalOpen} onCancel={() => setIsPaymentModalOpen(false)} footer={false} style={{textAlign: 'center'}}>
+                            <Title>Как оплатить занятие?</Title>
+                            <p>Оплата занятия возможна по системе быстрых платежей по реквизитам ниже. Обратите внимание: перед совершением перевода необходимо проверить корректность введенных данных получателя: номер телефона и ФИО. </p>
+                            <Title>Реквизиты для перевода</Title>
+                            <p>Номер телефона: <br />+7-900-000-00-00 <br />
+                            ФИО: Иванов Иван Иванович</p>
+                            <p>Название банка: ЦБРФСР</p>
+                        </Modal>
+                    </>
+                ) : userContext?.role && (
+                        <>
+                            <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
+                                <Title>{userContext?.fullName ?? userContext?.firstName + ' ' + userContext?.lastName}</Title>
+                                <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
+                                <div className={styles.authorization_buttons}>
+                                    <Button onClick={handleChangeOpen}>Редактирование</Button>
+                                    <Button onClick={handleQuit}>Выход</Button>
+                                </div>
+                            </Modal>
+                            <AppModal 
+                                open={isUserChangeModalOpen} 
+                                handleClose={() => setIsUserChangeModalOpen(false)} 
+                                fields={editTeacherFields.map(item => ({...item, defaultValue: userContext[item.name]}))} 
+                                footer={false}
+                                fullWidth
+                                handleSubmit={handleChange}
+                            >
+                                {contextHolder}
+                            </AppModal>
+                        </>
+                )
+            }
         </Header>
     )
 }

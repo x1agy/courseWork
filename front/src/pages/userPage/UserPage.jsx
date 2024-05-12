@@ -32,10 +32,10 @@ export const UserPage = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        if(!userContext){
+        if(!userContext || userContext?.role){
             navigate('/')
         }
-    }, [userContext])
+    }, [userContext, navigate])
 
     return(
         <Flex className={styles.container}>

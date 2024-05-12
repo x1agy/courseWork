@@ -129,6 +129,19 @@ export const editUserFields = [
     },
 ]
 
+export const editTeacherFields = [
+    ...loginFields,
+    {
+        label: 'Номер телефона',
+        validateTrigger: 'onBlur',
+        name: 'phoneNumber',
+        rules: [
+            {required: true, message: 'Заполните поле'},
+            {pattern: phoneRegexp, message: 'Введите правильный номер телефона'}
+        ]
+    },
+]
+
 export const gmtFields = [
     {
         value: '-11',
