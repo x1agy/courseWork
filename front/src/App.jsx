@@ -68,7 +68,7 @@ const App = () => {
             localStorage.setItem('all-users', JSON.stringify(response.filter(user => !user?.role)));
         }
 
-        if(userContext?.role && allUsers.length === 0){
+        if(userContext?.role){
             func()
         }else{
             localStorage.setItem('all-users', JSON.stringify(allUsers.filter(user => !user?.role)));

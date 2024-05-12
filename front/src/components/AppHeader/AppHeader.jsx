@@ -35,7 +35,7 @@ const AppHeader = () => {
 
     const screenSize = useScreenSize(700);
 
-    const weekChartData = formatWeekDataFromUser(userContext ?? []).slice(  -7);
+    const weekChartData = formatWeekDataFromUser(userContext ?? []).slice();
 
     const weekChartDataKeys= (weekChartData
         ?.reduce((acc, item) => [...acc, ...Object.keys(item)], [])
@@ -139,7 +139,7 @@ const AppHeader = () => {
                             <BarChart
                                 width={screenSize.width > 700 ? 500 : 400}
                                 height={300}
-                                data={weekChartData}
+                                data={weekChartData.slice(-7)}
                                 margin={{
                                     top: 20,
                                     right: 30,

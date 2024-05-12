@@ -13,8 +13,6 @@ export const UsersRepertoire = ({allUsers}) => {
             clone[key] = selectedUser[key];
         }
 
-        console.log(clone)
-
         setSelectedUser(clone ?? allUsers[0]);
 
     }, [allUsers])

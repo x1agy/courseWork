@@ -31,7 +31,6 @@ export const TeacherPage = () => {
         },
     ]
     
-
     return(
         <Flex vertical className={styles.container}>
             <Tabs
