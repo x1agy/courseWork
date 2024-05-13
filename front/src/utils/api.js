@@ -102,3 +102,14 @@ export const changePassword = async (credits) => {
     const data = await response.text();
     return data
 }
+
+export const createConf = async () => {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + '/conf', {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    })
+    const data = await response.text();
+    return data
+}

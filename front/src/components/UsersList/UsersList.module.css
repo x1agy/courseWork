@@ -1,0 +1,16 @@
+.conf{
+    color: blue;
+    text-align: center;
+}
+
+.conf:visited{
+    color: lightblue;
+}
+
+.status{
+    width: 100%;
+}
+
+:global(.ant-table-cell){
+    text-align: center;
+}

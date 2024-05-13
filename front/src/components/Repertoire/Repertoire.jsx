@@ -5,43 +5,43 @@ import { UserContext } from "../../App";
 import styles from './Repertoire.module.css';
 
 const columns = [
-    {
-      title: 'Название',
-      dataIndex: 'name',
-    },
-    {
-      title: 'Жанр',
-      dataIndex: 'genre',
-    },
-    {
-      title: 'Инструмент',
-      dataIndex: 'tool',
-    },
-    {
-      title: 'Композитор',
-      dataIndex: 'compositor',
-    },
-    {
-      title: 'Ссылка на ноты',
-      dataIndex: 'musicLink',
-    },
-    {
-      title: 'Стадия',
-      dataIndex: 'asdasd',
-    },
-    {
-      title: 'Ссылка на медиа',
-      dataIndex: 'linkToMusic'
-    },
-    {
-      title: 'Статус',
-      dataIndex: 'status'
-    },
-    {
-      title: '',
-      dataIndex: 'button'
-    }
-  ];
+  {
+    title: 'Название',
+    dataIndex: 'name',
+  },
+  {
+    title: 'Жанр',
+    dataIndex: 'genre',
+  },
+  {
+    title: 'Инструмент',
+    dataIndex: 'tool',
+  },
+  {
+    title: 'Композитор',
+    dataIndex: 'compositor',
+  },
+  {
+    title: 'Ссылка на ноты',
+    dataIndex: 'musicLink',
+  },
+  {
+    title: 'Стадия',
+    dataIndex: 'asdasd',
+  },
+  {
+    title: 'Ссылка на медиа',
+    dataIndex: 'linkToMusic'
+  },
+  {
+    title: 'Статус',
+    dataIndex: 'status'
+  },
+  {
+    title: '',
+    dataIndex: 'button'
+  }
+];
 
 const selectFields = ['разбор', 'шлифовка', 'наизусть'];
 

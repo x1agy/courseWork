@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Layout, Modal, message as antdMessage } from 'antd';
+import { Badge, Button, Dropdown, Layout, Modal, message as antdMessage } from 'antd';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { BellOutlined, PhoneOutlined } from '@ant-design/icons';
 import { CgProfile } from "react-icons/cg";
@@ -93,6 +93,18 @@ const AppHeader = () => {
             }
         }
     }
+
+    const items = [
+        {
+          key: '1',
+          label: (
+            <a target="_blank" rel="noopener noreferrer" href={userContext?.conf}>
+              Конференция
+            </a>
+          ),
+        },
+      ];
+
     return(
         <Header className={styles.header}>
             <Logo className={styles.logo}/>
@@ -108,7 +120,16 @@ const AppHeader = () => {
                 userContext
                 ? (
                     <div className={styles.authorization_buttons}>
-                        <BellOutlined className={styles.icons}/>
+                        <Dropdown
+                            menu={{
+                            items,
+                            }}
+                            disabled={!userContext?.conf}
+                        >
+                            <Badge count={userContext?.conf && 1}>
+                                <BellOutlined className={styles.icons} />
+                            </Badge>
+                        </Dropdown>
                         <CgProfile className={styles.icons} onClick={() => setIsUserModalOpen(true)}/>
                     </div>
                 ) : (
@@ -180,6 +201,7 @@ const AppHeader = () => {
                             ФИО: Иванов Иван Иванович</p>
                             <p>Название банка: ЦБРФСР</p>
                         </Modal>
+                        
                     </>
                 ) : userContext?.role && (
                         <>

@@ -40,6 +40,7 @@ const App = () => {
 
     const [userContext, setUserContex] = useState(initialState);
     const [allUsers, setAllUsers] = useState(allUsersInitialState);
+    const [refetchValue, setRefetchValue] = useState(0);
 
     const setUserContext = async (user) => {
         if(user === null){
@@ -73,10 +74,10 @@ const App = () => {
         }else{
             localStorage.setItem('all-users', JSON.stringify(allUsers.filter(user => !user?.role)));
         }
-    }, [userContext])
+    }, [userContext, refetchValue])
 
     return(
-        <AllUserContext.Provider value={allUsers}>
+        <AllUserContext.Provider value={{allUsers, setRefetchValue}}>
             <UserContext.Provider value={{userContext, setUserContext}}>
                 <AppLayout>
                     <RouterProvider router={router} />
