@@ -40,7 +40,7 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
     const handleCreateConf = (user) => {
         setIsLoading(true);
         createConf().then(res => {
-            return editUser({...user, conf: res}).then(_ => {
+            return editUser({...user, conf: res, status: user.status - 1}).then(_ => {
                 setRefetchValue(prev => prev + 1);
             })
         }).finally(() => {
@@ -93,10 +93,10 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
                                 <>
                                     <a className={styles.conf} href={item.conf}>Конференция</a>
                                     <br />
-                                    <Button type="danger" onClick={() => handleDeleteConf(item)}>Удалить</Button>
+                                    <Button type="danger" onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
                                 </>
                             ) : (
-                                <Button disabled={isLoading} onClick={() => handleCreateConf(item)}>Создать конференцию</Button>
+                                <Button disabled={isLoading || !item?.status} onClick={() => handleCreateConf(item)}>Создать конференцию</Button>
                             )
                         }
                     )
