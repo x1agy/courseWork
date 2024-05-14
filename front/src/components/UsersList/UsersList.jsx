@@ -23,6 +23,10 @@ const columns = [
         dataIndex: 'time',
     },
     {
+        title: 'Сколько лет учится',
+        dataIndex: 'spendTime'
+    },
+    {
         title: 'Кол-во занятий',
         dataIndex: 'status'
     },
@@ -87,8 +91,9 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
                             + item?.surname,
                             phone: item.phoneNumber,
                             tool: item.tool,
-                            time: getTimeInTimezone(item.GMT).getHours() + ' ч.',
+                            time: getTimeInTimezone(item.GMT).toString().match(/\d\d:\d\d/),
                             status: (<InputNumber className={styles.status} defaultValue={item?.status ?? 0} onChange={(value) => handleChange(item, value)}></InputNumber>),
+                            spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
                                     <a className={styles.conf} href={item.conf}>Конференция</a>
@@ -108,6 +113,11 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
             <Table
                 columns={columns}
                 dataSource={tableData}
+                rowClassName={(obj) => {
+                    if((obj.status.props.defaultValue ?? 0) < 2){
+                        return styles.danger
+                    }
+                }}
             />
         </Flex>
     )

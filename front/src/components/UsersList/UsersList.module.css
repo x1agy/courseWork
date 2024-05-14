@@ -14,3 +14,7 @@
 :global(.ant-table-cell){
     text-align: center;
 }
+
+.danger{
+    background-color: lightcoral;
+}
