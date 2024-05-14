@@ -1,7 +1,7 @@
 import { Button, Flex, InputNumber, Table } from "antd";
 import { getTimeInTimezone } from "../../utils/default";
 import { createConf, editUser } from "../../utils/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from './UsersList.module.css'
 
@@ -36,11 +36,16 @@ const columns = [
     }
 ];
 
-export const UsersList = ({allUsers, setRefetchValue}) => {
+export const UsersList = ({allUsers: users, setRefetchValue}) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [timer, setTimer] = useState(null);
-    
+    const [allUsers, setAllUsers] = useState(users);
+
+    useEffect(() => {
+        setAllUsers(users)
+    }, [users])
+
     const handleCreateConf = (user) => {
         setIsLoading(true);
         createConf().then(res => {
@@ -79,6 +84,8 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
         }
     }
 
+    console.log(allUsers)
+
     const tableData = 
         allUsers
             .map(
@@ -92,16 +99,21 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
                             phone: item.phoneNumber,
                             tool: item.tool,
                             time: getTimeInTimezone(item.GMT).toString().match(/\d\d:\d\d/),
-                            status: (<InputNumber className={styles.status} defaultValue={item?.status ?? 0} onChange={(value) => handleChange(item, value)}></InputNumber>),
+                            status: (<InputNumber className={styles.status} value={item?.status ?? 0} onChange={(value) => handleChange(item, value)}></InputNumber>),
                             spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
-                                    <a target="_blank" className={styles.conf} style={{backgroundColor: 'gray', padding: '2px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
+                                    <a target="_blank" className={styles.conf} style={{backgroundColor: 'white', border: '1px solid gray', padding: '5px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
                                     <br />
-                                    <Button type="primary" style={{width: '7em', backgroundColor: 'red'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
+                                    <Button type="primary" style={{width: '7em', backgroundColor: 'red', maxWidth: "6em", marginTop: '8px'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
                                 </>
                             ) : (
-                                <Button style={{backgroundColor: 'white'}} disabled={isLoading || !item?.status} onClick={() => handleCreateConf(item)}>Создать конференцию</Button>
+                                <Button style={{backgroundColor: 'white'}} disabled={isLoading || !item?.status} onClick={() => {
+                                    handleCreateConf(item);
+                                    setAllUsers(prev => {
+                                        return prev.map(obj => obj._id === item._id ? {...obj, status: item.status - 1} : obj)
+                                    })
+                                }}>Создать конференцию</Button>
                             )
                         }
                     )
