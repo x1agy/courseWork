@@ -3,6 +3,6 @@ export const randomHexColor = () => '#' + Math.floor(Math.random()*16777215).toS
 export const getTimeInTimezone = (timezone) => {
     const offset = parseInt(timezone.slice(1));
     const utcTime = new Date();
-    const localTime = new Date(utcTime.getTime() - 10800000  + (offset * 60 * 60 * 1000));
+    const localTime = new Date(utcTime.getTime() - 25200000  + (offset * 60 * 60 * 1000));
     return localTime;
 }
