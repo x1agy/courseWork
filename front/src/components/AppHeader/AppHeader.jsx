@@ -109,8 +109,8 @@ const AppHeader = () => {
         <Header className={styles.header}>
             <Logo className={styles.logo}/>
             <div className={styles.contacts_holder}>
-                <a href="фыв"><BsWhatsapp className={styles.icons}/></a>
-                <a href="фыв"><RiTelegramLine className={styles.icons}/></a>
+                <a target="_blank" href="https://wa.me/+79133968940"><BsWhatsapp className={styles.icons}/></a>
+                <a target="_blank" href="https://t.me/Mr_Cat212"><RiTelegramLine className={styles.icons}/></a>
                 <a href="tel:+79000000000">
                     <PhoneOutlined style={{fontSize: '50px', rotate: "90deg"}} className={styles.icons}/>
                     <span className={styles.phone_number}>+7-900-000-000</span>
