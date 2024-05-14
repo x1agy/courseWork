@@ -96,12 +96,12 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
                             spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
-                                    <a className={styles.conf} href={item.conf}>Конференция</a>
+                                    <a className={styles.conf} style={{backgroundColor: 'gray', padding: '2px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
                                     <br />
-                                    <Button type="danger" onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
+                                    <Button style={{backgroundColor: 'gray'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
                                 </>
                             ) : (
-                                <Button disabled={isLoading || !item?.status} onClick={() => handleCreateConf(item)}>Создать конференцию</Button>
+                                <Button style={{backgroundColor: 'gray'}} disabled={isLoading || !item?.status} onClick={() => handleCreateConf(item)}>Создать конференцию</Button>
                             )
                         }
                     )
