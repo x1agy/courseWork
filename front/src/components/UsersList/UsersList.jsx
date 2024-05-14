@@ -96,7 +96,7 @@ export const UsersList = ({allUsers, setRefetchValue}) => {
                             spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
-                                    <a className={styles.conf} style={{backgroundColor: 'gray', padding: '2px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
+                                    <a target="_blank" className={styles.conf} style={{backgroundColor: 'gray', padding: '2px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
                                     <br />
                                     <Button style={{backgroundColor: 'gray'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
                                 </>
