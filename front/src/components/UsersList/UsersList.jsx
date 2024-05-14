@@ -126,7 +126,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
                 columns={columns}
                 dataSource={tableData}
                 rowClassName={(obj) => {
-                    if((obj.status.props.defaultValue ?? 0) < 2){
+                    if((obj.status.props.value ?? 0) < 2){
                         return styles.danger
                     }
                 }}
