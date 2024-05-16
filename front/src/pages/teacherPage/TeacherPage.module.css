@@ -18,9 +18,6 @@
         }
         gap: 50px !important;
     }
-    :global(.ant-tabs-tabpane){
-        overflow-x: scroll;
-    }
     :global(.ant-tabs-tab-btn){
     font-size: 1.5rem !important;
         @media(max-width: 700px){

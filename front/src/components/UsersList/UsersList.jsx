@@ -4,6 +4,7 @@ import { createConf, editUser } from "../../utils/api";
 import { useEffect, useState } from "react";
 
 import styles from './UsersList.module.css'
+import useScreenSize from './../../hooks/useScreenSize';
 
 const columns = [
     {
@@ -41,6 +42,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [timer, setTimer] = useState(null);
     const [allUsers, setAllUsers] = useState(users);
+    const {width} = useScreenSize()
 
     useEffect(() => {
         setAllUsers(users)
@@ -119,7 +121,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
             )
 
     return (
-        <Flex style={{ overflowX: 'auto', width: '100%' }}>
+        <Flex style={{ overflowX: width < 800 ? 'auto' : 'hidden', width: '100%' }}>
             <Table
                 columns={columns}
                 dataSource={tableData}
