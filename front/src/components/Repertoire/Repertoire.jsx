@@ -108,7 +108,7 @@ const Repertoire = ({userContextProp}) => {
     }, [form, isOpen, selectedField, userContext?.repertoire])
 
     return (
-        <Flex vertical>
+        <Flex vertical style={{ overflowX: 'auto', width: '100%' }}>
 
           <Table
               columns={columns}

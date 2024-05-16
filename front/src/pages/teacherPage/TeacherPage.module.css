@@ -8,12 +8,18 @@
     
 }
 
+:global(.ant-tabs){
+    width: 100vw !important;
+}
 .anchor{
     :global(.ant-tabs-nav-list){
         @media(max-width: 700px){
             gap: 0px !important;
         }
         gap: 50px !important;
+    }
+    :global(.ant-tabs-tabpane){
+        overflow-x: scroll;
     }
     :global(.ant-tabs-tab-btn){
     font-size: 1.5rem !important;

@@ -188,9 +188,11 @@ app.post('/confirm_email', async (req, res) => {
 })
 
 app.post('/check_is_exist', async (req, res) => {
+    console.log(req.body)
     try{
         await client.connect();
         const users = await client.db().collection('users').find({login: req.body.login}).toArray();
+        console.log(users)
         if(users.length > 0){
             if(req.body?.password === users[0].password){
                 res.send(users[0]);

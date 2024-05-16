@@ -84,8 +84,6 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
         }
     }
 
-    console.log(allUsers)
-
     const tableData = 
         allUsers
             .map(
@@ -103,7 +101,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
                             spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
-                                    <a target="_blank" className={styles.conf} style={{backgroundColor: 'white', border: '1px solid gray', padding: '5px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
+                                    <a rel="noreferrer" target="_blank" className={styles.conf} style={{backgroundColor: 'white', border: '1px solid gray', padding: '5px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
                                     <br />
                                     <Button type="primary" style={{width: '7em', backgroundColor: 'red', maxWidth: "6em", marginTop: '8px'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
                                 </>
@@ -121,7 +119,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
             )
 
     return (
-        <Flex>
+        <Flex style={{ overflowX: 'auto', width: '100%' }}>
             <Table
                 columns={columns}
                 dataSource={tableData}
