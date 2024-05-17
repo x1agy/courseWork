@@ -18,3 +18,11 @@
 .danger{
     background-color: #ffb6c1;
 }
+
+:global(.ant-input-number-input){
+    text-align: center !important;
+}
+
+:global(.ant-table-cell){
+    text-align: center !important;
+}

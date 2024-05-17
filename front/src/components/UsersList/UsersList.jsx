@@ -99,7 +99,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
                             phone: item.phoneNumber,
                             tool: item.tool,
                             time: getTimeInTimezone(item.GMT).toString().match(/\d\d:\d\d/),
-                            status: (<InputNumber className={styles.status} value={item?.status ?? 0} onChange={(value) => handleChange(item, value)}></InputNumber>),
+                            status: (<InputNumber style={{textAlign: 'center', width: 'fit-content'}} className={styles.status} value={item?.status ?? 0} onChange={(value) => handleChange(item, value)}></InputNumber>),
                             spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
