@@ -232,7 +232,7 @@ export const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) 
     const codeRegexp = new RegExp(pattern);
 
     return(
-        <Modal open={open} onCancel={handleClose} footer={false}>
+        <Modal open={open} onCancel={handleClose} footer={false} centered style={{top: '-150px'}}>
             <Title level={5}>
                 Введите код который пришёл вам на почту
             </Title>

@@ -7,30 +7,33 @@ import { UserStats } from './../../components/UserStats/UserStats';
 import Calendar from "../../components/Calendar/Calendar";
 import { useNavigate } from "react-router-dom";
 import Repertoire from "../../components/Repertoire/Repertoire";
+import { useTranslation } from "react-i18next";
 
-const tabsItems = [
-    {
-        key: 'part-1',
-        label: 'Трекер',
-        children: <Calendar />
-    },
-    {
-        key: 'part-2',        
-        label: 'Статистика',
-        children: <UserStats />
-    },
-    {
-        key: 'part-3',
-        label: 'Репертуар',
-        children: <Repertoire />
-    },
-]
 
 export const UserPage = () => {
-
+    
     const {userContext} = useContext(UserContext);
     const navigate = useNavigate();
+    const {t} = useTranslation();
     
+    const tabsItems = [
+        {
+            key: 'part-1',
+            label: t('tracker'),
+            children: <Calendar />
+        },
+        {
+            key: 'part-2',        
+            label: t('stats'),
+            children: <UserStats />
+        },
+        {
+            key: 'part-3',
+            label: t('repertoire'),
+            children: <Repertoire />
+        },
+    ]
+
     useEffect(() => {
         if(!userContext || userContext?.role){
             navigate('/')
@@ -43,6 +46,7 @@ export const UserPage = () => {
                 direction="horizontal"
                 className={styles.anchor}
                 items={tabsItems}
+                defaultActiveKey="part-3"
             >
             </Tabs>
         </Flex>

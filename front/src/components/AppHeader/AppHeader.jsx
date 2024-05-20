@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import { Badge, Button, Dropdown, Layout, Modal, message as antdMessage } from 'antd';
+import { Badge, Button, Dropdown, Flex, Layout, Modal, Popover, message as antdMessage } from 'antd';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { BellOutlined, PhoneOutlined } from '@ant-design/icons';
 import { CgProfile } from "react-icons/cg";
-import { RiTelegramLine } from "react-icons/ri";
+import { RiEarthFill, RiTelegramLine } from "react-icons/ri";
 import { BsWhatsapp } from "react-icons/bs";
 import { BarChart, Bar, CartesianGrid, YAxis } from 'recharts';
 
@@ -18,6 +18,7 @@ import { formatWeekDataFromUser } from "../../utils/formatDataForCharts";
 import { randomHexColor } from "../../utils/default";
 import useScreenSize from './../../hooks/useScreenSize';
 import { XAxis } from 'recharts';
+import { useTranslation } from "react-i18next";
 
 const { Header } = Layout;
 
@@ -28,6 +29,21 @@ const AppHeader = () => {
     const [isUserChangeModalOpen, setIsUserChangeModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [modalType, setModalType] = useState('');
+    const { t, i18n } = useTranslation();
+
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+    };
+
+    const [open, setOpen] = useState(false);
+
+    const hide = () => {
+        setOpen(false);
+    };
+
+    const handleOpenChange = (newOpen) => {
+        setOpen(newOpen);
+    };
 
     const {userContext, setUserContext} = useContext(UserContext);
 
@@ -103,7 +119,14 @@ const AppHeader = () => {
             </a>
           ),
         },
-      ];
+    ];
+
+    const languageDropDown = (
+        <Flex vertical gap='10px'>
+            <Button onClick={() => changeLanguage('en')}>English</Button>
+            <Button onClick={() => changeLanguage('ru')}>Russian</Button>
+        </Flex>
+    )
 
     return(
         <Header className={styles.header}>
@@ -116,35 +139,50 @@ const AppHeader = () => {
                     <span className={styles.phone_number}>+7-900-000-000</span>
                 </a>
             </div>
+            <div className={styles.authorization_buttons}>
+                <Popover
+                    content={languageDropDown}
+                    title={t('language')}
+                    trigger="click"
+                    open={open}
+                    onOpenChange={handleOpenChange}
+                >
+                    <Button><RiEarthFill /></Button>
+                </Popover>
             {
                 userContext
                 ? (
-                    <div className={styles.authorization_buttons}>
-                        <Dropdown
-                            menu={{
-                            items,
-                            }}
-                            disabled={!userContext?.conf}
-                        >
-                            <Badge count={userContext?.conf && 1}>
-                                <BellOutlined className={styles.icons} />
-                            </Badge>
-                        </Dropdown>
-                        <CgProfile className={styles.icons} onClick={() => setIsUserModalOpen(true)}/>
-                    </div>
+                        <>
+                            {
+                                !userContext?.role && (
+                                    <Dropdown
+                                        menu={{
+                                            items,
+                                        }}
+                                        disabled={!userContext?.conf}
+                                    >
+                                        <Badge count={userContext?.conf && 1}>
+                                            <BellOutlined className={styles.icons} />
+                                        </Badge>
+                                    </Dropdown>
+                                )
+                            }
+                            <CgProfile className={styles.icons} onClick={() => setIsUserModalOpen(true)}/>
+                        </>
                 ) : (
-                    <div className={styles.authorization_buttons}>
-                        <Button className={styles.button} onClick={() => {
-                            setModalType('Регистрация');
-                            setIsModalOpen(true);
-                        }}>Регистрация</Button>
-                        <Button className={styles.button} onClick={() => {
-                            setModalType('Вход');
-                            setIsModalOpen(true);
-                        }}>Вход</Button>
-                    </div>
+                        <>
+                            <Button className={styles.button} onClick={() => {
+                                setModalType('Регистрация');
+                                setIsModalOpen(true);
+                            }}>Регистрация</Button>
+                            <Button className={styles.button} onClick={() => {
+                                setModalType('Вход');
+                                setIsModalOpen(true);
+                            }}>Вход</Button>
+                        </>
                 )
             }
+            </div>
             <LoginModal 
                 open={isModalOpen} 
                 setIsOpen={setIsModalOpen} 
@@ -157,6 +195,7 @@ const AppHeader = () => {
                             <Title>{userContext?.fullName ?? userContext?.firstName + ' ' + userContext?.lastName}</Title>
                             <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
                             <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
+                            <p><strong>Количество занятий:</strong> {userContext?.status ?? 0}</p>
                             <BarChart
                                 width={screenSize.width > 700 ? 500 : 400}
                                 height={300}
