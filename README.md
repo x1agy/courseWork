@@ -15,7 +15,7 @@
 <p>Open yours mongoDB, make db, name it courseDB, create new collection and name it users</p>
 <p>Copy url of DB, and paste it in backend/.env in DB_URL</p>
 
-<h2>For create teacher account give for new account role: "teacher" in your DB</h2>
+<h2>For create teacher account add field 'role: "teacher"' for new user in your DB</h2>
 
 <h2>For environment variables: </h2>
 
