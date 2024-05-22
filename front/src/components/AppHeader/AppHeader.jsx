@@ -131,58 +131,60 @@ const AppHeader = () => {
     return(
         <Header className={styles.header}>
             <Logo className={styles.logo}/>
-            <div className={styles.contacts_holder}>
-                <a target="_blank" href="https://wa.me/+79133968940"><BsWhatsapp className={styles.icons}/></a>
-                <a target="_blank" href="https://t.me/Mr_Cat212"><RiTelegramLine className={styles.icons}/></a>
-                <a href="tel:+79000000000">
-                    <PhoneOutlined style={{fontSize: '50px', rotate: "90deg"}} className={styles.icons}/>
-                    <span className={styles.phone_number}>+7-900-000-000</span>
-                </a>
-            </div>
-            <div className={styles.authorization_buttons}>
-                <Popover
-                    content={languageDropDown}
-                    title={t('language')}
-                    trigger="click"
-                    open={open}
-                    onOpenChange={handleOpenChange}
-                >
-                    <Button><RiEarthFill /></Button>
-                </Popover>
-            {
-                userContext
-                ? (
-                        <>
-                            {
-                                !userContext?.role && (
-                                    <Dropdown
-                                        menu={{
-                                            items,
-                                        }}
-                                        disabled={!userContext?.conf}
-                                    >
-                                        <Badge count={userContext?.conf && 1}>
-                                            <BellOutlined className={styles.icons} />
-                                        </Badge>
-                                    </Dropdown>
-                                )
-                            }
-                            <CgProfile className={styles.icons} onClick={() => setIsUserModalOpen(true)}/>
-                        </>
-                ) : (
-                        <>
-                            <Button className={styles.button} onClick={() => {
-                                setModalType('Регистрация');
-                                setIsModalOpen(true);
-                            }}>Регистрация</Button>
-                            <Button className={styles.button} onClick={() => {
-                                setModalType('Вход');
-                                setIsModalOpen(true);
-                            }}>Вход</Button>
-                        </>
-                )
-            }
-            </div>
+            <Flex className={styles.headerButtons}>
+                <div className={styles.contacts_holder}>
+                    <a target="_blank" href="https://wa.me/+79133968940"><BsWhatsapp className={styles.icons}/></a>
+                    <a target="_blank" href="https://t.me/Mr_Cat212"><RiTelegramLine className={styles.icons}/></a>
+                    <a href="tel:+79000000000">
+                        <PhoneOutlined style={{fontSize: '50px', rotate: "90deg"}} className={styles.icons}/>
+                        <span className={styles.phone_number}>+7-900-000-000</span>
+                    </a>
+                </div>
+                <div className={styles.authorization_buttons}>
+                    <Popover
+                        content={languageDropDown}
+                        title={t('language')}
+                        trigger="click"
+                        open={open}
+                        onOpenChange={handleOpenChange}
+                    >
+                        <Button><RiEarthFill /></Button>
+                    </Popover>
+                {
+                    userContext
+                    ? (
+                            <div className={styles.authIcons}>
+                                {
+                                    !userContext?.role && (
+                                        <Dropdown
+                                            menu={{
+                                                items,
+                                            }}
+                                            disabled={!userContext?.conf}
+                                        >
+                                            <Badge count={userContext?.conf && 1}>
+                                                <BellOutlined className={styles.icons} />
+                                            </Badge>
+                                        </Dropdown>
+                                    )
+                                }
+                                <CgProfile className={styles.icons} onClick={() => setIsUserModalOpen(true)}/>
+                            </div>
+                    ) : (
+                            <div className={styles.notAuthIcons}>
+                                <Button className={styles.button} onClick={() => {
+                                    setModalType('Регистрация');
+                                    setIsModalOpen(true);
+                                }}>Регистрация</Button>
+                                <Button className={styles.button} onClick={() => {
+                                    setModalType('Вход');
+                                    setIsModalOpen(true);
+                                }}>Вход</Button>
+                            </div>
+                    )
+                }
+                </div>
+            </Flex>
             <LoginModal 
                 open={isModalOpen} 
                 setIsOpen={setIsModalOpen} 

@@ -33,6 +33,35 @@
     gap: 1rem;
 }
 
+@media(max-width: 515px){
+    .authorization_buttons{
+        flex-direction: column;
+    }
+
+    .header{
+        height: 8rem;
+        width: 70vw;
+    }
+
+    .headerButtons{
+        flex-direction: column;
+    }
+}
+
+@media(max-width: 635px){
+    .authorization_buttons{
+        flex-direction: column;
+    }
+
+    .header{
+        min-width: 90vw !important;
+    }
+
+    .headerButtons{
+        flex-direction: column;
+    }
+}
+
 .icons{
     font-size: 35px;
     width: 35px;
@@ -70,9 +99,7 @@
     }
     .header{
         max-width: 100%;
-        min-width: auto;
-        padding: 0;
-        align-items: center;
+        padding: 0 30px;
         padding-top: 20px;
         gap: 15px
     }
@@ -82,8 +109,36 @@
     .authorization_buttons{
         flex-wrap: wrap;
         margin-left: auto;
+        flex-direction: row;
+        align-items: start;
     }
     .button{
         width: 120px;
+    }
+}
+
+@media(max-width: 400px){
+    .header{
+        left: 7rem;
+    }
+}
+
+.authIcons{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notAuthIcons{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media(max-width: 600px){
+    .notAuthIcons{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 }
