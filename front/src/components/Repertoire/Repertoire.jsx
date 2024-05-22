@@ -92,7 +92,7 @@ const Repertoire = ({userContextProp}) => {
       else if (length === 6) return ({...item, status: 'В работе'});
       else return {...item, status: 'Готово'}
     }).map((item, index) => ({...item, button: (
-      <>
+      <Flex vertical>
         <Button onClick={() => {
           setIsOpen(true);
           selectedField.current = index;
@@ -100,7 +100,7 @@ const Repertoire = ({userContextProp}) => {
         <Button type="primary" style={{width: '7em', backgroundColor: 'red'}} onClick={() => handleDelete(index)}>
           Удалить
         </Button>
-      </>
+      </Flex>
     ), key: index}))
 
     useEffect(() => {
