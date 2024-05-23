@@ -6,20 +6,23 @@ import { Flex, Typography } from "antd";
 import { Footer } from "antd/es/layout/layout";
 import Title from "antd/es/typography/Title";
 import { PhoneOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const AppFooter = () => {
+    const {t} = useTranslation()
+
     return(
         <Footer className={styles.footer}>
             <Flex className={styles.footerContent}>
                 <Logo className={styles.logo}/>
                 <Title level={5}>
-                    Школа игры на арфе Марии Маковецкой
+                    {t('footerInfo1')}
                     <br />
                     <small className={styles.terms}>
-                        Обращаясь к нам за услугами, вы даете согласие на обработку ваших персональных данных.
+                        {t('footerInfo2')}
                     </small>
                     <small className={styles.terms}>
-                        2024 - 2025 © Все права защищены
+                        {t('footerInfo3')}
                     </small>
                 </Title>
                 <Typography.Text className={styles.callUs}>
@@ -28,7 +31,7 @@ const AppFooter = () => {
                     <br />
                     <b>почта@mail.ru</b>
                     <br />
-                    Пн-Вс с 8:00 до 23:00
+                    {t('footerInfo5')}
                 </Typography.Text>
             </Flex>
         </Footer>

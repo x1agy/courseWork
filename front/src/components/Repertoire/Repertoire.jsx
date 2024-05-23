@@ -3,56 +3,58 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
 
 import styles from './Repertoire.module.css';
+import { useTranslation } from "react-i18next";
 
-const columns = [
-  {
-    title: 'Название',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Жанр',
-    dataIndex: 'genre',
-  },
-  {
-    title: 'Инструмент',
-    dataIndex: 'tool',
-  },
-  {
-    title: 'Композитор',
-    dataIndex: 'compositor',
-  },
-  {
-    title: 'Ссылка на ноты',
-    dataIndex: 'musicLink',
-  },
-  {
-    title: 'Стадия',
-    dataIndex: 'asdasd',
-  },
-  {
-    title: 'Ссылка на медиа',
-    dataIndex: 'linkToMusic'
-  },
-  {
-    title: 'Статус',
-    dataIndex: 'status'
-  },
-  {
-    title: '',
-    dataIndex: 'button'
-  }
-];
-
-const selectFields = ['разбор', 'шлифовка', 'наизусть'];
 
 const Repertoire = ({userContextProp}) => {
+  
+  const {userContext: globalUserContext, setUserContext} = useContext(UserContext);
+  let userContext = userContextProp ?? globalUserContext
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedField = useRef(null)
+  const [form] = Form.useForm();
+  const {t} = useTranslation()
 
-    const {userContext: globalUserContext, setUserContext} = useContext(UserContext);
-    let userContext = userContextProp ?? globalUserContext
-    const [isOpen, setIsOpen] = useState(false);
-    const selectedField = useRef(null)
-    const [form] = Form.useForm();
-
+  const columns = [
+    {
+      title: t('name'),
+      dataIndex: 'name',
+    },
+    {
+      title: t('genre'),
+      dataIndex: 'genre',
+    },
+    {
+      title: t('instrument'),
+      dataIndex: 'tool',
+    },
+    {
+      title: t('composer'),
+      dataIndex: 'compositor',
+    },
+    {
+      title: t('link1'),
+      dataIndex: 'musicLink',
+    },
+    {
+      title: t('stage'),
+      dataIndex: 'asdasd',
+    },
+    {
+      title: t('link2'),
+      dataIndex: 'linkToMusic'
+    },
+    {
+      title: t('status'),
+      dataIndex: 'status'
+    },
+    {
+      title: '',
+      dataIndex: 'button'
+    }
+  ];
+  
+  const selectFields = [t('analysis'), t('grinding'), t('memorize')];
     const handleDelete = (deleteIndex) => {
       const repertoire = userContext?.repertoire;
       const sameObj = userContext?.repertoire?.find((_, index) => index === deleteIndex);
@@ -96,9 +98,9 @@ const Repertoire = ({userContextProp}) => {
         <Button onClick={() => {
           setIsOpen(true);
           selectedField.current = index;
-        }} style={{marginBottom: '20px', width: '7em'}}>Изменить</Button>
+        }} style={{marginBottom: '20px', width: '7em'}}>{t('edit')}</Button>
         <Button type="primary" style={{width: '7em', backgroundColor: 'red'}} onClick={() => handleDelete(index)}>
-          Удалить
+          {t('delete')}
         </Button>
       </Flex>
     ), key: index}))
@@ -132,7 +134,7 @@ const Repertoire = ({userContextProp}) => {
 
           <Button onClick={() => {
             setIsOpen(true);
-          }}>Добавить произведение</Button>
+          }}>{t('add')}</Button>
 
           <Modal footer={false} open={isOpen} destroyOnClose={true} onCancel={() => {
             setIsOpen(false);
@@ -145,7 +147,7 @@ const Repertoire = ({userContextProp}) => {
                     return (
                       <Form.Item 
                         label={item.title} 
-                        rules={[{min: 3, message: 'Заполните поле'}, {required: true, message: 'Заполните поля'}]} 
+                        rules={[{min: 3, message: t('error1')}, {required: true, message: 'Заполните поля'}]} 
                         name={item.dataIndex} 
                         key={index} 
                         initialValue={
@@ -163,7 +165,7 @@ const Repertoire = ({userContextProp}) => {
                     return (
                       <Form.Item 
                         label={item.title} 
-                        rules={[{min: 3, message: 'Заполните поле'}, {required: true, message: 'Заполните поля'}]} 
+                        rules={[{min: 3, message: t('error1')}, {required: true, message: 'Заполните поля'}]} 
                         name={item.dataIndex} 
                         key={index} 
                         initialValue={
@@ -178,7 +180,7 @@ const Repertoire = ({userContextProp}) => {
                   }
                 })}
 
-                <Button htmlType="submit">Отправить</Button>
+                <Button htmlType="submit">{t('send')}</Button>
               </Form>
           </Modal>
         </Flex>

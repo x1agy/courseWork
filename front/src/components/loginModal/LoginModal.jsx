@@ -4,10 +4,15 @@ import AppModal from "../UI/appModal/AppModal";
 import Title from "antd/es/typography/Title";
 
 import { changePassword, checkIsUserExist, confirmEmail, createAccount } from '../../utils/api';
-import { loginFields, recoveryFields, registrationFields } from "../../utils/formFields";
+// import { loginFields, recoveryFields, registrationFields } from "../../utils/formFields";
 import { UserContext } from "../../App";
+import { useTranslation } from "react-i18next";
 
-const anchorTypes = ['Регистрация', 'Вход'];
+const emailRegexp =
+  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+
+const phoneRegexp =
+  /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/;
 
 const reducer = (state, action) => {
     switch(action.type){
@@ -49,7 +54,7 @@ const LoginModal = ({
     modalType, 
     setModalType
 }) => {
-
+    
     const [messageApi, contextHolder] = message.useMessage();
     const [{
         emailCode, 
@@ -62,6 +67,73 @@ const LoginModal = ({
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
     const [user, setUser] = useState();
     const {setUserContext} = useContext(UserContext);
+    const {t} = useTranslation();
+
+    const loginFields = [
+        {
+          label: t("mail"),
+          validateTrigger: "onBlur",
+          name: "login",
+          rules: [
+            { required: true, message: t('enterLogin') },
+            { pattern: emailRegexp, message: "Введите корректную почту" },
+          ],
+        },
+        {
+          label: t("password"),
+          validateTrigger: "onBlur",
+          name: "password",
+          rules: [{ required: true, message: "Введите пароль" }],
+        },
+      ];
+
+      const registrationFields = [
+        ...loginFields,
+        {
+          label: t("LFS"),
+          validateTrigger: "onBlur",
+          name: "fullName",
+          rules: [
+            { required: true, message: t("error1") },
+            { pattern: /[А-яёЁ]+\s[А-яёЁ]+\s?([А-яёЁ]+)?/, message: t("error2") },
+          ],
+        },
+        {
+          label: t("phone"),
+          validateTrigger: "onBlur",
+          name: "phoneNumber",
+          rules: [
+            { required: true, message: t("error1") },
+            { pattern: phoneRegexp, message: t("error3") },
+          ],
+        },
+        {
+          label: t("timeZone"),
+          validateTrigger: "onBlur",
+          name: "GMT",
+          rules: [
+            { required: true, message: t("error1") },
+            { pattern: /[+-]\d?\d/g, message: "Введите правильный часовой пояс" },
+          ],
+        },
+        {
+          label: t("instrument"),
+          validateTrigger: "onBlur",
+          name: "tool",
+          rules: [{ required: true, message: t("error1") }],
+        },
+        {
+          label: t("howMany"),
+          validateTrigger: "onBlur",
+          name: "spendTime",
+          rules: [
+            { required: true, message: t("error1") },
+            { pattern: /\d?\d/g, message: t("error4") },
+          ],
+        },
+      ];
+
+    const anchorTypes = [t('signUp'), t('login')];
 
     const error = useCallback((message) => {
         messageApi.open({
@@ -84,20 +156,20 @@ const LoginModal = ({
 
     const handleSubmit = async (user) => {
         setUser(user);
-        if(modalType === 'Вход'){
+        if(modalType === t('login')){
             try{
                 const profile = await checkIsUserExist({login: user.login, password: user.password});
                 if(profile?.result ?? true){
                     dispatch({
                         type: 'loginResult',
-                        payload: {success: 'Вы успешно вошли'}
+                        payload: {success: t('log')}
                     });
                     setUserContext(profile);
                     localStorage.setItem('user', JSON.stringify(profile));
                 }else{
                     dispatch({
                         type: 'loginResult',
-                        payload: {error: 'Неправильный логин или пароль'}
+                        payload: {error: t('error')}
                     })
                 }
             }catch(e){
@@ -174,7 +246,7 @@ const LoginModal = ({
             open={open} 
             handleClose={() => setIsOpen(false)}
             title={modalType}
-            fields={modalType === 'Вход' ? loginFields : registrationFields}
+            fields={modalType === t('login') ? loginFields : registrationFields}
             handleSubmit={handleSubmit}
             footer={false}
             changePassword={() => setIsChangePasswordOpen(true)}
@@ -223,6 +295,7 @@ const LoginModal = ({
 }
 
 export const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) => {
+    const {t} = useTranslation()
     
     const handleSubmit = () => {
         handleClose();
@@ -234,7 +307,7 @@ export const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) 
     return(
         <Modal open={open} onCancel={handleClose} footer={false} centered style={{top: '-150px'}}>
             <Title level={5}>
-                Введите код который пришёл вам на почту
+                {t('sendCode')}
             </Title>
             <Form onFinish={handleSubmit }>
                 <Form.Item
@@ -242,7 +315,7 @@ export const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) 
                     rules={[
                         {
                             required: true, 
-                            message: 'Введите код', 
+                            message: t('code'), 
                             validateTrigger: "onBlur"
                         }, 
                         {
@@ -253,17 +326,36 @@ export const ConfirmEmailModal = ({open, handleClose, pattern, setIsConfirmed}) 
                     ]}>
                     <Input.OTP />
                 </Form.Item>
-                <Button htmlType="submit">Отправить</Button>
+                <Button htmlType="submit">{t('send')}</Button>
             </Form>
         </Modal>
     )
 }
 
 const ChangePasswordModal = ({open, handleClose, setError, setSuccess}) => {
-
     const [isEnterCodeOpened, setIsEnterCodeOpened] = useState(false);
     const [userValues, setUserValues] = useState();
     const [code, setCode] = useState();
+    const {t} = useTranslation()
+
+    const recoveryFields = [
+        {
+          label: t("mail"),
+          validateTrigger: "onBlur",
+          name: "login",
+          rules: [
+            { required: true, message: t('enterLogin') },
+            { pattern: emailRegexp, message: "Введите корректную почту" },
+          ],
+        },
+        {
+          label: t("password"),
+          validateTrigger: "onBlur",
+          name: "password",
+          rules: [{ required: true, message: "Введите пароль" }],
+        },
+      ];
+
 
     const getCode = async (login) => {
         const codeEmail = await confirmEmail(login);
@@ -281,7 +373,7 @@ const ChangePasswordModal = ({open, handleClose, setError, setSuccess}) => {
             {!isEnterCodeOpened
                 ?   <AppModal
                         fields={[...recoveryFields]}
-                        title='Восстановление пароля'
+                        title={t('recoveryPass')}
                         open={open}
                         handleClose={handleClose}
                         handleSubmit={handleSubmit}
@@ -290,14 +382,14 @@ const ChangePasswordModal = ({open, handleClose, setError, setSuccess}) => {
                     </AppModal>
                 :   <AppModal
                         open={isEnterCodeOpened}
-                        title='Введите код'
+                        title={t('code')}
                         handleClose={() => setIsEnterCodeOpened(false)}
                         fields={[{
-                            label: 'Введите код',
+                            label: t('code'),
                             validateTrigger: "onBlur",
                             name: 'code',
                             rules: [
-                                {required: true, message: 'Введите код'},
+                                {required: true, message: t('code')},
                                 {pattern: new RegExp(code), message: 'Неправильный код'}
                             ]
                         }]}

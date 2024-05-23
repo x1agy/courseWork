@@ -4,14 +4,17 @@ import { Button, Calendar, Col, Dropdown, Flex, Form, Input, Modal, Row, Select,
 import styles from './calendar.module.css';
 import { UserContext } from '../../App';
 import { DownOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
-const monthsS = ["Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентября","Октября","Ноября","Декабря"];
+const monthsS = [t('jan'),t('feb'),t('mar'),t('apr'),t('may'),t('jun'),t('jul'),t('aug'),t('sep'),t('oct'),t('nov'),t('dec')]
 
 const CalendarComponent = () => {
   
   const {userContext, setUserContext} = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotActive, setIsNotActive] = useState(false);
+  const {t} = useTranslation()
 
   const handleSubmit = (values) => {
     setIsModalOpen(false);
@@ -91,10 +94,10 @@ const CalendarComponent = () => {
           key: item.playedTime,
           label: (
             <div>
-              <p className={styles.dropdownItem}><strong>Произведение: </strong>{item.proizvedenie}</p>
-              <p className={styles.dropdownItem}><strong>Инструмент:</strong> {item.tool}</p>
-              <p className={styles.dropdownItem}><strong>Время занятий:</strong> {new Date(item.playedTime).getMinutes()} минут</p>
-              {item?.comment && <p className={styles.dropdownItem}><strong>Коментарий:</strong> {item?.comment}</p>}
+              <p className={styles.dropdownItem}><strong>{t('composition')}: </strong>{item.proizvedenie}</p>
+              <p className={styles.dropdownItem}><strong>{t('instrument')}:</strong> {item.tool}</p>
+              <p className={styles.dropdownItem}><strong>{t('classTime')}:</strong> {new Date(item.playedTime).getMinutes()} минут</p>
+              {item?.comment && <p className={styles.dropdownItem}><strong>{t('comment')}:</strong> {item?.comment}</p>}
             </div>
           ),
         },
@@ -218,31 +221,31 @@ const CalendarComponent = () => {
           ?.calendar
           ?.[new Date().getMonth()]
           ?.length - 1 === new Date().getDate()
-          }>Добавить активность</Button>
+          }>{t('activity')}</Button>
       <Modal 
         open={isModalOpen} 
         onCancel={() => setIsModalOpen(false)}
         footer={false}
       >
         <Form layout='vertical' onFinish={handleSubmit}>
-          <Form.Item name='activity' label='Активность' rules={[{required: true, message: 'Заполните поле'}]}>
+          <Form.Item name='activity' label={t('activ')} rules={[{required: true, message: t('error1')}]}>
             <Select onChange={(i) => i === 'notActive' ? setIsNotActive(true) : setIsNotActive(false)}>
-              <Select.Option value='active'>Активный</Select.Option>
+              <Select.Option value='active'>{t('active')}</Select.Option>
               <Select.Option value='notActive'>Не активный</Select.Option>
             </Select>
           </Form.Item>
           {!isNotActive && (
-            <Form.Item name='tool' label='Инструмент который вы изучали' rules={[{required: true, message: 'Заполните поле'}]}>
+            <Form.Item name='tool' label={t('tool')} rules={[{required: true, message: t('error1')}]}>
               <Input />
             </Form.Item>
           )}
           {!isNotActive && (
-            <Form.Item label='Время занятий' name='playedTime' rules={[{required: true, message: 'Заполните поле'}]}>
+            <Form.Item label={t('classTime')} name='playedTime' rules={[{required: true, message: t('error1')}]}>
               <TimePicker/>
             </Form.Item>
           )}
           {!isNotActive && (
-            <Form.Item label='Произведение' name='proizvedenie' rules={[{required: true, message: 'Заполните поле'}]}>
+            <Form.Item label={t('composition')} name='proizvedenie' rules={[{required: true, message: t('error1')}]}>
               {
                 userContext?.repertoire?.length ? (
                   <Select>
@@ -255,11 +258,11 @@ const CalendarComponent = () => {
             </Form.Item>
           )}
           {!isNotActive && (
-            <Form.Item label="Коментарий" name='comment'>
+            <Form.Item label={t('comment')} name='comment'>
               <Input.TextArea/>
             </Form.Item>
           )}
-          <Button htmlType='submit'>Отправить</Button>
+          <Button htmlType='submit'>{t('send')}</Button>
         </Form>
       </Modal>
     </Flex>

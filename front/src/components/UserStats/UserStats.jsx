@@ -7,11 +7,14 @@ import { useContext } from "react";
 import { UserContext } from "../../App";
 
 import styles from './UserStats.module.css'
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 export const UserStats = () => {
     const {userContext} = useContext(UserContext);
     const screenSize = useScreenSize(700);
     const chartData = formatWeekDataFromUser(userContext ?? []);
+    const {t} = useTranslation();
 
     const monthChartData = formatMonthDataFromUser(userContext ?? []);
 
@@ -28,7 +31,7 @@ export const UserStats = () => {
     const tabsItems = [
         {
             key: 'part-1',
-            label: 'Неделя',
+            label: t('week'),
             children: (
                 <div className={styles.chart}>
                     <BarChart
@@ -44,20 +47,20 @@ export const UserStats = () => {
                     >
                         <CartesianGrid strokeDasharray="1 1" />
                         <XAxis tickFormatter={(a) => customDayXAxis(a, chartData)}/>
-                        <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
+                        <YAxis tickFormatter={(num) => num === 1 ? t('active') : ''}/>
                         {chartDataKeys.map((item, index) => {
                             return(
                                 <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} maxBarSize={50}/>
                             )
                         })}
                     </BarChart>
-                    <h3>На этой неделе процент активных дней у вас составляет: {Math.round(chartData.slice(-7).filter(item => 'undefined' in item).length * 100 / 7)}%</h3>
+                    <h3>{t('percentage')} {Math.round(chartData.slice(-7).filter(item => 'undefined' in item).length * 100 / 7)}%</h3>
                 </div>
             )
         },
         {
             key: 'part-2',        
-            label: 'Месяц',
+            label: t('month'),
             children: (
                 <div className={styles.chart}>
                     <BarChart
@@ -73,7 +76,7 @@ export const UserStats = () => {
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis tickFormatter={customMonthXAxis}/>
-                        <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
+                        <YAxis tickFormatter={(num) => num === 1 ? t('active') : ''}/>
                         {monthDataKeys.map((item, index) => {
                             return(
                                 <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
@@ -86,7 +89,7 @@ export const UserStats = () => {
         },
         {
             key: 'part-3',
-            label: 'Год',
+            label: t('year'),
             children: (
                 <div className={styles.chart}>
                     <BarChart
@@ -127,17 +130,17 @@ export const UserStats = () => {
 
 const customDayXAxis = (rest, chartData) => {
     const length = chartData?.length - 6;
-    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    const dayNames = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')];
     return dayNames[new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay()]
 }
 
 const customMonthXAxis = (rest) => {
-    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    const dayNames = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')];
     // eslint-disable-next-line
     return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest === 0 ? 30 : rest) + ')'
 }
 
 const customYearXAxis = (rest) => {
-    const months = ["Янв", "Февр", "Март", "Апр", "Май", "Июнь", "Июль", "Авг", "Сент", "Окт", 'Ноябрь', "Дек"];
+    const months = [t('jan'),t('feb'),t('mar'),t('apr'),t('may'),t('jun'),t('jul'),t('aug'),t('sep'),t('oct'),t('nov'),t('dec')];
     return months[rest]
 }

@@ -11,7 +11,6 @@ import styles from './appHeader.module.css';
 import LoginModal from "../loginModal/LoginModal";
 import { UserContext } from "../../App";
 import AppModal from "../UI/appModal/AppModal";
-import { editTeacherFields, editUserFields } from "../../utils/formFields";
 import { checkIsUserExist, editUser } from "../../utils/api";
 import Title from "antd/es/typography/Title";
 import { formatWeekDataFromUser } from "../../utils/formatDataForCharts";
@@ -19,8 +18,15 @@ import { randomHexColor } from "../../utils/default";
 import useScreenSize from './../../hooks/useScreenSize';
 import { XAxis } from 'recharts';
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 const { Header } = Layout;
+
+const emailRegexp =
+  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+
+const phoneRegexp =
+  /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/;
 
 const AppHeader = () => {
 
@@ -31,6 +37,73 @@ const AppHeader = () => {
     const [modalType, setModalType] = useState('');
     const { t, i18n } = useTranslation();
 
+    const loginFields = [
+        {
+            label: t("mail"),
+            validateTrigger: "onBlur",
+            name: "login",
+            rules: [
+            { required: true, message: t('enterLogin') },
+            { pattern: emailRegexp, message: "Введите корректную почту" },
+            ],
+        },
+        {
+            label: t("password"),
+            validateTrigger: "onBlur",
+            name: "password",
+            rules: [{ required: true, message: "Введите пароль" }],
+        },
+    ];
+
+    const editUserFields = [
+        ...loginFields,
+        {
+        label: t('LFS'),
+        validateTrigger: "onBlur",
+        name: "fullName",
+        rules: [
+            { required: true, message: t("error1") },
+            { pattern: /[А-яёЁ]+\s[А-яёЁ]+\s?([А-яёЁ]+)?/, message: t("error2") },
+        ],
+        },
+        {
+        label: t("phone"),
+        validateTrigger: "onBlur",
+        name: "phoneNumber",
+        rules: [
+            { required: true, message: t("error1") },
+            { pattern: phoneRegexp, message: t("error3") },
+        ],
+        },
+        {
+        label: t("timeZone"),
+        validateTrigger: "onBlur",
+        name: "GMT",
+        rules: [
+            { required: true, message: t("error1") },
+            { pattern: /[+-]\d?\d/g, message: "Введите правильный часовой пояс" },
+        ],
+        },
+        {
+        label: t("instrument"),
+        validateTrigger: "onBlur",
+        name: "tool",
+        rules: [{ required: true, message: t("error1") }],
+        },
+    ];
+
+    const editTeacherFields = [
+        ...loginFields,
+        {
+        label: t("phone"),
+        validateTrigger: "onBlur",
+        name: "phoneNumber",
+        rules: [
+            { required: true, message: t("error1") },
+            { pattern: phoneRegexp, message: t("error3") },
+        ],
+        },
+    ];
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);
     };
@@ -115,7 +188,7 @@ const AppHeader = () => {
           key: '1',
           label: (
             <a target="_blank" rel="noopener noreferrer" href={userContext?.conf}>
-              Конференция
+              {t('conf')}
             </a>
           ),
         },
@@ -173,13 +246,13 @@ const AppHeader = () => {
                     ) : (
                             <div className={styles.notAuthIcons}>
                                 <Button className={styles.button} onClick={() => {
-                                    setModalType('Регистрация');
+                                    setModalType(t('signUp'));
                                     setIsModalOpen(true);
-                                }}>Регистрация</Button>
+                                }}>{t('signUp')}</Button>
                                 <Button className={styles.button} onClick={() => {
-                                    setModalType('Вход');
+                                    setModalType(t('login'));
                                     setIsModalOpen(true);
-                                }}>Вход</Button>
+                                }}>{t('login')}</Button>
                             </div>
                     )
                 }
@@ -195,9 +268,9 @@ const AppHeader = () => {
                     <>
                         <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
                             <Title>{userContext?.fullName ?? userContext?.firstName + ' ' + userContext?.lastName}</Title>
-                            <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
-                            <p key='instrument'><strong>Инструмент:</strong> {userContext.tool}</p>
-                            <p><strong>Количество занятий:</strong> {userContext?.status ?? 0}</p>
+                            <p key='number'><strong>{t('phone')}:</strong> {userContext.phoneNumber}</p>
+                            <p key='instrument'><strong>{t('instrument')}:</strong> {userContext.tool}</p>
+                            <p><strong>{t('numberClasses')}:</strong> {userContext?.status ?? 0}</p>
                             <BarChart
                                 width={screenSize.width > 700 ? 500 : 400}
                                 height={300}
@@ -211,7 +284,7 @@ const AppHeader = () => {
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis tickFormatter={(a) => customDayXAxis(a, weekChartData)}/>
-                                <YAxis tickFormatter={(num) => num === 1 ? 'Активный' : ''}/>
+                                <YAxis tickFormatter={(num) => num === 1 ? t('active') : ''}/>
                                 {weekChartDataKeys.map((item, index) => {
                                     return(
                                         <Bar key={index} dataKey={item} stackId={index} fill={randomHexColor()} />
@@ -219,9 +292,9 @@ const AppHeader = () => {
                                 })}
                             </BarChart>
                             <div className={styles.authorization_buttons}>
-                                <Button onClick={handleChangeOpen}>Редактирование</Button>
-                                <Button onClick={() => setIsPaymentModalOpen(true)}>Как оплатить? </Button>
-                                <Button onClick={handleQuit}>Выход</Button>
+                                <Button onClick={handleChangeOpen}>{t('editing')}</Button>
+                                <Button onClick={() => setIsPaymentModalOpen(true)}>{t('how')} </Button>
+                                <Button onClick={handleQuit}>{t('exit')}</Button>
                             </div>
                         </Modal>
                         <AppModal 
@@ -235,12 +308,12 @@ const AppHeader = () => {
                             {contextHolder}
                         </AppModal>
                         <Modal open={isPaymentModalOpen} onCancel={() => setIsPaymentModalOpen(false)} footer={false} style={{textAlign: 'center'}}>
-                            <Title>Как оплатить занятие?</Title>
-                            <p>Оплата занятия возможна по системе быстрых платежей по реквизитам ниже. Обратите внимание: перед совершением перевода необходимо проверить корректность введенных данных получателя: номер телефона и ФИО. </p>
-                            <Title>Реквизиты для перевода</Title>
-                            <p>Номер телефона: <br />+7-900-000-00-00 <br />
+                            <Title>{t('how')} </Title>
+                            <p>{t('info6')} </p>
+                            <Title>{t('info7')}</Title>
+                            <p>{t('phone')}: <br />+7-900-000-00-00 <br />
                             ФИО: Иванов Иван Иванович</p>
-                            <p>Название банка: ЦБРФСР</p>
+                            <p>{t('info8')}</p>
                         </Modal>
                         
                     </>
@@ -248,10 +321,10 @@ const AppHeader = () => {
                         <>
                             <Modal footer={false} onCancel={() => setIsUserModalOpen(false)} open={isUserModalOpen}>
                                 <Title>{userContext?.fullName ?? userContext?.firstName + ' ' + userContext?.lastName}</Title>
-                                <p key='number'><strong>Номер телефона:</strong> {userContext.phoneNumber}</p>
+                                <p key='number'><strong>{t('phone')}:</strong> {userContext.phoneNumber}</p>
                                 <div className={styles.authorization_buttons}>
-                                    <Button onClick={handleChangeOpen}>Редактирование</Button>
-                                    <Button onClick={handleQuit}>Выход</Button>
+                                    <Button onClick={handleChangeOpen}>{t('editing')}</Button>
+                                    <Button onClick={handleQuit}>{t('exit')}</Button>
                                 </div>
                             </Modal>
                             <AppModal 
@@ -273,7 +346,7 @@ const AppHeader = () => {
 
 const customDayXAxis = (rest, chartData) => {
     const length = chartData?.length - 6;
-    const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    const dayNames = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')];
     return dayNames[new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay()]
 }
 

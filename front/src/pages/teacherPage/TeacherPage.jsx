@@ -6,12 +6,14 @@ import styles from './TeacherPage.module.css';
 import { useNavigate } from "react-router-dom";
 import { UsersRepertoire } from "./usersRepertoire/UsersRepertoire";
 import { UsersList } from "../../components/UsersList/UsersList";
+import { useTranslation } from "react-i18next";
 
 export const TeacherPage = () => {
 
     const {allUsers, setRefetchValue} = useContext(AllUserContext);
     const {userContext} = useContext(UserContext); 
     const navigate = useNavigate();
+    const {t} = useTranslation()
 
     useEffect(() => {
         if(!userContext?.role){
@@ -22,7 +24,7 @@ export const TeacherPage = () => {
     const tabsItems = [
         {
             key: 'part-1',
-            label: 'Мои ученики',
+            label: t('students'),
             children: <UsersList allUsers={allUsers} setRefetchValue={setRefetchValue}/>
         },
         {

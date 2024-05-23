@@ -5,44 +5,47 @@ import { useEffect, useState } from "react";
 
 import styles from './UsersList.module.css'
 import useScreenSize from './../../hooks/useScreenSize';
+import { useTranslation } from "react-i18next";
 
-const columns = [
-    {
-        title: 'ФИО',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Номер телефона',
-        dataIndex: 'phone',
-    },
-    {
-        title: 'Инструмент',
-        dataIndex: 'tool',
-    },
-    {
-        title: 'Время',
-        dataIndex: 'time',
-    },
-    {
-        title: 'Сколько лет учится',
-        dataIndex: 'spendTime'
-    },
-    {
-        title: 'Кол-во занятий',
-        dataIndex: 'status'
-    },
-    {
-        title: 'Создание конференции',
-        dataIndex: 'button'
-    }
-];
 
 export const UsersList = ({allUsers: users, setRefetchValue}) => {
-
+    
     const [isLoading, setIsLoading] = useState(false);
     const [timer, setTimer] = useState(null);
     const [allUsers, setAllUsers] = useState(users);
     const {width} = useScreenSize()
+    const {t} = useTranslation();
+
+    const columns = [
+        {
+            title: 'ФИО',
+            dataIndex: 'name',
+        },
+        {
+            title: t('phone'),
+            dataIndex: 'phone',
+        },
+        {
+            title: t('instrument'),
+            dataIndex: 'tool',
+        },
+        {
+            title: t('time'),
+            dataIndex: 'time',
+        },
+        {
+            title: t('howManyYears'),
+            dataIndex: 'spendTime'
+        },
+        {
+            title: t('numberClasses1'),
+            dataIndex: 'status'
+        },
+        {
+            title: 'Создание конференции',
+            dataIndex: 'button'
+        }
+    ];
 
     useEffect(() => {
         setAllUsers(users)
@@ -103,9 +106,9 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
                             spendTime: item?.spendTime ?? 1,
                             button: item?.conf ? (
                                 <>
-                                    <a rel="noreferrer" target="_blank" className={styles.conf} style={{backgroundColor: 'white', border: '1px solid gray', padding: '5px', borderRadius: '5px'}} href={item.conf}>Конференция</a>
+                                    <a rel="noreferrer" target="_blank" className={styles.conf} style={{backgroundColor: 'white', border: '1px solid gray', padding: '5px', borderRadius: '5px'}} href={item.conf}>{t('conf')}</a>
                                     <br />
-                                    <Button type="primary" style={{width: '7em', backgroundColor: 'red', maxWidth: "6em", marginTop: '8px'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>Удалить</Button>
+                                    <Button type="primary" style={{width: '7em', backgroundColor: 'red', maxWidth: "6em", marginTop: '8px'}} onClick={() => handleDeleteConf(item)} disabled={isLoading}>{t('delete')}</Button>
                                 </>
                             ) : (
                                 <Button style={{backgroundColor: 'white'}} disabled={isLoading || !item?.status} onClick={() => {
@@ -113,7 +116,7 @@ export const UsersList = ({allUsers: users, setRefetchValue}) => {
                                     setAllUsers(prev => {
                                         return prev.map(obj => obj._id === item._id ? {...obj, status: item.status - 1} : obj)
                                     })
-                                }}>Создать конференцию</Button>
+                                }}>{t('createConf')}</Button>
                             )
                         }
                     )

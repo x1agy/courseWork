@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "antd/es/modal/Modal";
 import Title from "antd/es/typography/Title";
 import { Button, Form, Input, Select } from "antd";
 import { gmtFields } from "../../../utils/formFields";
 
 import styles from './appModal.module.css';
+import { useTranslation } from "react-i18next";
 
 const modalStyles = {
     mask: {
@@ -29,6 +30,8 @@ const AppModal = ({
     const onGmtChange = (value) => {
         form.setFieldsValue({GMT: value})
     }
+
+    const {t} = useTranslation()
 
     return(
         <Modal 
@@ -67,8 +70,8 @@ const AppModal = ({
                     )
                 })}
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" style={{marginInlineEnd: '1em', width: fullWidth ? '100%' : ''}}>Отправить</Button>
-                    {(fields.length === 2 && title !== 'Восстановление пароля') && <Button onClick={changePassword}>Забыли пароль?</Button>}
+                    <Button type="primary" htmlType="submit" style={{marginInlineEnd: '1em', width: fullWidth ? '100%' : ''}}>{t('send')}</Button>
+                    {(fields.length === 2 && title !== t('recoveryPass')) && <Button onClick={changePassword}>{t('forgot')}</Button>}
                 </Form.Item>
             </Form>
         </Modal>
