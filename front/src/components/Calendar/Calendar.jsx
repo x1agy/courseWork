@@ -5,9 +5,7 @@ import styles from './calendar.module.css';
 import { UserContext } from '../../App';
 import { DownOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { t } from 'i18next';
 
-const monthsS = [t('jan'),t('feb'),t('mar'),t('apr'),t('may'),t('jun'),t('jul'),t('aug'),t('sep'),t('oct'),t('nov'),t('dec')]
 
 const CalendarComponent = () => {
   
@@ -15,6 +13,7 @@ const CalendarComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotActive, setIsNotActive] = useState(false);
   const {t} = useTranslation()
+  const monthsS = [t('jan'),t('feb'),t('mar'),t('apr'),t('may'),t('jun'),t('jul'),t('aug'),t('sep'),t('oct'),t('nov'),t('dec')]
 
   const handleSubmit = (values) => {
     setIsModalOpen(false);
@@ -212,7 +211,7 @@ const CalendarComponent = () => {
         }}
       />
       <Col>
-          <strong>Сегодня {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
+          <strong>{t('dataNow')} {new Date().getDate()} {monthsS[new Date().getMonth()]}</strong>
       </Col>
       <Button 
         onClick={() => setIsModalOpen(true)} 

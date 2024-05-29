@@ -158,12 +158,12 @@ const AppHeader = () => {
 
 
     const handleChange = async (values) => {
-        const name = values?.fullName.split(' ');
+        const name = values?.fullName?.split(' ') ?? ['','',''];
         const formattedUser = {...values, firstName: name[1], lastName: name[0], surname: name[2] ?? ''}
         const newProfile = {...userContext, ...formattedUser};
 
         if(JSON.stringify(newProfile) === JSON.stringify(userContext)){
-            error('Вы не внесли изменения');
+            error(t('error6'));
             return
         }
 
@@ -252,7 +252,7 @@ const AppHeader = () => {
                                 <Button className={styles.button} onClick={() => {
                                     setModalType(t('login'));
                                     setIsModalOpen(true);
-                                }}>{t('login')}</Button>
+                                }}>{t('logIn')}</Button>
                             </div>
                     )
                 }

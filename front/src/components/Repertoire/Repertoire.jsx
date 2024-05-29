@@ -147,7 +147,7 @@ const Repertoire = ({userContextProp}) => {
                     return (
                       <Form.Item 
                         label={item.title} 
-                        rules={[{min: 3, message: t('error1')}, {required: true, message: 'Заполните поля'}]} 
+                        rules={[{min: 3, message: t('error1')}, {required: true, message: t('error6')}]} 
                         name={item.dataIndex} 
                         key={index} 
                         initialValue={
@@ -165,7 +165,7 @@ const Repertoire = ({userContextProp}) => {
                     return (
                       <Form.Item 
                         label={item.title} 
-                        rules={[{min: 3, message: t('error1')}, {required: true, message: 'Заполните поля'}]} 
+                        rules={[{min: 3, message: t('error1')}, {required: true, message: t('error6')}]} 
                         name={item.dataIndex} 
                         key={index} 
                         initialValue={

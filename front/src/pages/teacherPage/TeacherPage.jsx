@@ -29,7 +29,7 @@ export const TeacherPage = () => {
         },
         {
             key: 'part-2',        
-            label: 'Репертуар',
+            label: t('repertoire'),
             children: <UsersRepertoire allUsers={allUsers}/>
         },
     ]
