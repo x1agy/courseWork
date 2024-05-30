@@ -167,9 +167,9 @@ const AppHeader = () => {
             return
         }
 
-        const isEmailExist = (await checkIsUserExist(values.login)).split(' ')[1];
+        const isEmailExist = (await checkIsUserExist(values.login));
 
-        if(isEmailExist !== userContext.login){
+        if(isEmailExist !== 'not'){
             error('Пользователь с такой почтой уже существует');
         }else{
             const editResponse = await editUser(newProfile);
