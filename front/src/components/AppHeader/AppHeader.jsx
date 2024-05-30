@@ -214,15 +214,6 @@ const AppHeader = () => {
                     </a>
                 </div>
                 <div className={styles.authorization_buttons}>
-                    <Popover
-                        content={languageDropDown}
-                        title={t('language')}
-                        trigger="click"
-                        open={open}
-                        onOpenChange={handleOpenChange}
-                    >
-                        <Button><RiEarthFill /></Button>
-                    </Popover>
                 {
                     userContext
                     ? (
