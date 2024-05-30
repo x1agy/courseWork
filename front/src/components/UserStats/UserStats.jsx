@@ -129,15 +129,16 @@ export const UserStats = () => {
 }
 
 const customDayXAxis = (rest, chartData) => {
-    const length = chartData?.length - 6;
-    const dayNames = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')];
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay()]
+    const length = chartData?.length - 7;
+    const dayNames = [t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su'), t('mo')];
+    const day = new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay();
+    return dayNames[day]
 }
 
 const customMonthXAxis = (rest) => {
-    const dayNames = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')];
+    const dayNames = [t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su'), t('mo')];
     // eslint-disable-next-line
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + 1}/2024`).getDay()] + ' ' + '(' + (rest === 0 ? 30 : rest) + ')'
+    return dayNames[new Date(`${new Date().getMonth()}/${rest}/2024`).getDay()] + ' ' + '(' + (rest === 0 ? 31 : rest) + ')'
 }
 
 const customYearXAxis = (rest) => {
