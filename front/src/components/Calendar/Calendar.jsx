@@ -13,7 +13,7 @@ const CalendarComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotActive, setIsNotActive] = useState(false);
   const {t} = useTranslation()
-  const monthsS = [t('jan'),t('feb'),t('mar'),t('apr'),t('may'),t('jun'),t('jul'),t('aug'),t('sep'),t('oct'),t('nov'),t('dec')]
+  const monthsS = ["Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентября","Октября","Ноября","Декабря"];
 
   const handleSubmit = (values) => {
     setIsModalOpen(false);
