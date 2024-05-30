@@ -336,9 +336,10 @@ const AppHeader = () => {
 }
 
 const customDayXAxis = (rest, chartData) => {
-    const length = chartData?.length - 6;
-    const dayNames = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')];
-    return dayNames[new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay()]
+    const length = chartData?.length - 7;
+    const dayNames = [t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su'), t('mo')];
+    const day = new Date(`${new Date().getMonth()}/${rest + length}/${new Date().getFullYear()}`).getDay();
+    return dayNames[day]
 }
 
 export default AppHeader;
