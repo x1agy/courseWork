@@ -133,7 +133,7 @@ const LoginModal = ({
         },
       ];
 
-    const anchorTypes = [t('signUp'), t('login')];
+    const anchorTypes = [t('signUp'), t('logIn')];
 
     const error = useCallback((message) => {
         messageApi.open({
@@ -156,7 +156,7 @@ const LoginModal = ({
 
     const handleSubmit = async (user) => {
         setUser(user);
-        if(modalType === t('login')){
+        if(modalType === t('logIn')){
             try{
                 const profile = await checkIsUserExist({login: user.login, password: user.password});
                 if(profile?.result ?? true){
@@ -246,7 +246,7 @@ const LoginModal = ({
             open={open} 
             handleClose={() => setIsOpen(false)}
             title={modalType}
-            fields={modalType === t('login') ? loginFields : registrationFields}
+            fields={modalType === t('logIn') ? loginFields : registrationFields}
             handleSubmit={handleSubmit}
             footer={false}
             changePassword={() => setIsChangePasswordOpen(true)}

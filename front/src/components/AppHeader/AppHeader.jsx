@@ -241,7 +241,7 @@ const AppHeader = () => {
                                     setIsModalOpen(true);
                                 }}>{t('signUp')}</Button>
                                 <Button className={styles.button} onClick={() => {
-                                    setModalType(t('login'));
+                                    setModalType(t('logIn'));
                                     setIsModalOpen(true);
                                 }}>{t('logIn')}</Button>
                             </div>

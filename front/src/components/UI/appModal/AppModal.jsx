@@ -58,8 +58,8 @@ const AppModal = ({
                                 item.name === 'GMT'
                                 ? 
                                   <Select onChange={onGmtChange}>
-                                    {Array.from({ length: 22 }, (_, k) => k).map((_, index) => (
-                                        <Select.Option key={index} value={t('GMT'+ (index + 1))}>{t('GMT'+ (index + 1))}</Select.Option>
+                                    {gmtFields.map((item, index) => (
+                                        <Select.Option key={index} value={item.value}>{item.value + ' ' + item.name}</Select.Option>
                                     ))}
                                   </Select>
                                 : item.name === 'password'
